@@ -1,0 +1,44 @@
+package com.aetherwars.model;
+
+import com.aetherwars.card.Card;
+
+public class Player {
+    private String name;
+    private int hp;
+    private int mana;
+    private Deck deck;
+    private Hand hand;
+    private Board board;
+
+    public void doOneTurn() {
+    }
+
+    public void draw() {
+        /*  Dari ambil 1 kartu dari deck
+         *   Misal:
+         *   this.hand.add(this.deck.take());
+         * */
+    }
+
+    public void handToBoard() {
+        /*  Bisa kayak misal:
+         *   this.board.add(hand.take());
+         * */
+    }
+
+    public void showHand() { // Bisa pass params index
+        this.hand.show();
+    }
+
+    public void showBoard() { // Bisa pass params index
+        this.board.show();
+    }
+
+    public void takeAttack(Card c) {
+
+    }
+
+    public void attack(Player p, Card c) {
+        p.takeAttack(c);
+    }
+}
