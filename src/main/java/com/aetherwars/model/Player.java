@@ -33,12 +33,12 @@ public class Player {
          * */
     }
 
-    public void showHand() { // Bisa pass params index
-        this.hand.show();
+    public void showHand(int i) { // Bisa pass params index
+        // this.hand.show(i);
     }
 
-    public void showBoard() { // Bisa pass params index
-        this.board.show();
+    public void showBoard(int i) { // Bisa pass params index
+        // this.board.show(i);
     }
 
     public void takeAttack(Card c) {
