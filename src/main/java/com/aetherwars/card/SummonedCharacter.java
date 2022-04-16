@@ -1,7 +1,8 @@
 package com.aetherwars.card;
 
-import com.aetherwars.util.Type;
 import com.aetherwars.util.Status;
+import com.aetherwars.util.Type;
+
 import java.util.ArrayList;
 
 public class SummonedCharacter {
@@ -18,21 +19,28 @@ public class SummonedCharacter {
         this.character = character;
         this.level = level;
         this.exp = exp;
-        this.totalAttack = character.getBaseAtk() + (level-1) * character.getAttackUp();
-        this.totalHealth = character.getBaseHp() + (level-1) * character.getHealthUp();
+        this.totalAttack = character.getBaseAtk() + (level - 1) * character.getAttackUp();
+        this.totalHealth = character.getBaseHp() + (level - 1) * character.getHealthUp();
         this.activePotions = new ArrayList<>();
     }
 
     // Getters and Setters
+    public CharacterCard getCharacter() {
+        return character;
+    }
+
     public int getLevel() {
         return this.level;
     }
+
     public void setLevel(int level) {
         this.level = level;
     }
+
     public int getExp() {
         return this.exp;
     }
+
     public void setExp(int exp) {
         this.exp = exp;
     }
@@ -40,12 +48,15 @@ public class SummonedCharacter {
     public int getTotalAttack() {
         return this.totalAttack;
     }
+
     public void setTotalAttack(int totalAttack) {
         this.totalAttack = totalAttack;
     }
+
     public int getTotalHealth() {
         return this.totalHealth;
     }
+
     public void setTotalHealth(int totalHealth) {
         this.totalHealth = totalHealth;
     }
@@ -53,6 +64,7 @@ public class SummonedCharacter {
     public ArrayList<PotionSpellCard> getActivePotions() {
         return this.activePotions;
     }
+
     public void addActivePotions(PotionSpellCard activePotion) {
         this.activePotions.add(activePotion);
     }
@@ -92,11 +104,10 @@ public class SummonedCharacter {
         int expAdded = other.getLevel();
 
         if ((this.character.getType() == Type.NETHER && other.character.getType() == Type.OVERWORLD) ||
-            (this.character.getType() == Type.OVERWORLD && other.character.getType() == Type.END) ||
-            (this.character.getType() == Type.END && other.character.getType() == Type.NETHER)) {
+                (this.character.getType() == Type.OVERWORLD && other.character.getType() == Type.END) ||
+                (this.character.getType() == Type.END && other.character.getType() == Type.NETHER)) {
             damage = damage / 2; // round down damage
-        }
-        else if (this.character.getType() != other.character.getType()) {
+        } else if (this.character.getType() != other.character.getType()) {
             damage = damage * 2;
         }
 
@@ -104,8 +115,7 @@ public class SummonedCharacter {
         if (this.totalHealth <= 0) {
             // character dies
             this.character.setHp(0);
-        }
-        else {
+        } else {
             // damage sufficient, only taking from potions' hp and health itselves
             // Top = back
             while (this.activePotions.size() > 0 && damage > 0) {
@@ -113,8 +123,7 @@ public class SummonedCharacter {
                 if (hp > damage) {
                     this.activePotions.get(this.activePotions.size() - 1).setHP(hp - damage);
                     damage = 0;
-                }
-                else {
+                } else {
                     damage -= hp;
                     this.activePotions.remove(this.activePotions.size() - 1);
                 }
@@ -122,6 +131,7 @@ public class SummonedCharacter {
         }
         return expAdded;
     }
+
     public void attack(SummonedCharacter other) {
         // To attack, just call attack(), no need calling takeAttack()
         this.exp += other.takeAttack(this);
@@ -132,16 +142,14 @@ public class SummonedCharacter {
             this.activePotions.clear();
             System.out.println("Character dead");
             return;
-        }
-        else {
+        } else {
             // Apply spells effect for specific duration (TEMP) or permanenty (PERM)
             int i = 0;
             while (this.activePotions.size() > 0 && i < this.activePotions.size()) {
                 Status temp = this.activePotions.get(i).decreaseDuration();
                 if (temp == Status.INACTIVE) {
                     this.activePotions.remove(i);
-                }
-                else {
+                } else {
                     i++;
                 }
             }
@@ -152,7 +160,7 @@ public class SummonedCharacter {
     public void takeSpell(SpellCard s) {
         // SpellCard s is added to a CharacterCard this
         ArrayList<Object> ret = new ArrayList<>();
-        if(s.getType() == Type.PTN) {
+        if (s.getType() == Type.PTN) {
             if (s instanceof PotionSpellCard) {
                 PotionSpellCard sNew = (PotionSpellCard) s;
                 this.addActivePotions(sNew);
@@ -166,8 +174,7 @@ public class SummonedCharacter {
                 System.out.println("Character dead");
                 return;
             }
-        }
-        else if (s.getType() == Type.LVL) {
+        } else if (s.getType() == Type.LVL) {
             ret = s.giveEffect();
             this.level += (Integer) ret.get(0);
             this.exp += (Integer) ret.get(1);
@@ -177,9 +184,8 @@ public class SummonedCharacter {
                 System.out.println("Character dead");
                 return;
             }
-        }
-        else if (s.getType() == Type.SWAP) {
-            if (swapDurationLeft == 0){
+        } else if (s.getType() == Type.SWAP) {
+            if (swapDurationLeft == 0) {
                 int temp = this.character.getBaseAtk();
                 this.character.setAtk(this.character.getBaseHp());
                 this.character.setHp(temp);
@@ -193,8 +199,7 @@ public class SummonedCharacter {
                 }
             }
             this.swapDurationLeft = s.getDuration();
-        }
-        else if (s.getType() == Type.MORPH) {
+        } else if (s.getType() == Type.MORPH) {
             ret = s.giveEffect();
             this.character.setName((String) ret.get(0));
             this.character.setDesc((String) ret.get(1));
@@ -212,5 +217,9 @@ public class SummonedCharacter {
             this.countTotalAttack();
             this.countTotalHealth();
         }
+    }
+
+    public void show() {
+
     }
 }

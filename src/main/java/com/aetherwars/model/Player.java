@@ -2,6 +2,8 @@ package com.aetherwars.model;
 
 import com.aetherwars.card.Card;
 
+import java.util.HashMap;
+
 public class Player {
     private String name;
     private int hp;
@@ -9,6 +11,11 @@ public class Player {
     private Deck deck;
     private Hand hand;
     private Board board;
+
+    // Nitip, nanti buat dipass ke deck
+    Player(HashMap<String, Card> cdict) {
+        deck = new Deck(cdict);
+    }
 
     public void doOneTurn() {
     }

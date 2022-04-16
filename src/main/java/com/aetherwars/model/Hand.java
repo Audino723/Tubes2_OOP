@@ -1,17 +1,105 @@
 package com.aetherwars.model;
 
 import com.aetherwars.card.Card;
+import com.aetherwars.card.SummonedCharacter;
+import com.aetherwars.exceptions.EmptyContainerException;
+import com.aetherwars.exceptions.FullContainerException;
+import com.aetherwars.exceptions.NoCardChosenException;
+import com.aetherwars.exceptions.SpaceFilledException;
 
 public class Hand implements CardContainer {
-    private Card[] cardsInHand;
+    private Card[] cards;
+    private int neff;
 
-    public void add(Card c) {
+    Hand() {
+        this.cards = new Card[5];
+        this.neff = 0;
     }
 
-    public Card take() {
+    public int getNeff() {
+        return this.neff;
+    }
+
+    public void add(Card c) throws FullContainerException {
+        /* Add card di tempat kosong pertama */
+        if (this.neff == 5) {
+            throw new FullContainerException();
+        } else {
+            for (int i = 0; i < 5; i++) {
+                if (this.cards[i] == null) {
+                    this.cards[i] = c;
+                    return;
+                }
+            }
+        }
+    }
+
+    public void add(Card c, int i) throws SpaceFilledException, FullContainerException {
+        /* Add card sesuai indeks */
+        if (this.cards[i] != null) {
+            throw new SpaceFilledException();
+        } else if (this.neff == 5) {
+            throw new FullContainerException();
+        } else {
+            this.cards[i] = c;
+            this.neff++;
+        }
+    }
+
+    public Card take() throws EmptyContainerException {
+        /* Ambil card di tempat tidak kosong pertama */
+        if (this.neff == 0) {
+            throw new EmptyContainerException();
+        } else {
+            for (int i = 0; i < 5; i++) {
+                if (this.cards[i] != null) {
+                    Card tmp = this.cards[i];
+                    this.cards[i] = null;
+                    this.neff--;
+                    return tmp;
+                }
+            }
+        }
+
         return null;
     }
 
-    public void show() {
+    public Card take(int i) throws NoCardChosenException {
+        /* Ambil card sesuai indeks */
+        if (this.cards[i] == null) {
+            throw new NoCardChosenException();
+        } else {
+            Card tmp = this.cards[i];
+            this.cards[i] = null;
+            this.neff--;
+
+            return tmp;
+        }
+    }
+
+    /* Kalau mau diambil sebagai card (untuk pindahin ke hand) */
+    public SummonedCharacter takeAsCharacter() throws EmptyContainerException {
+        Card c = this.take();
+        SummonedCharacter sc = null;
+        return sc;
+    }
+
+    public SummonedCharacter takeAsCharacter(int i) throws NoCardChosenException {
+        Card c = this.take(i);
+        SummonedCharacter sc = null;
+        return sc;
+    }
+
+    public void show(int i) throws NoCardChosenException {
+        if (this.cards[i] == null) {
+            throw new NoCardChosenException();
+        } else {
+            this.cards[i].show();
+        }
+    }
+
+    // To debug
+    public void showAll() {
+
     }
 }
