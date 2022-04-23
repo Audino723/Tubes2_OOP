@@ -48,11 +48,33 @@ public class Player {
         return this.board;
     }
 
+    public Deck getDeck()
+    {
+        return this.deck;
+    }
+
     public void setMana(int rounds){
         this.mana = Math.max(10, rounds);
     }
 
     public Boolean startTurn(int rounds) {
+        // Check first round
+        if (rounds == 1)
+        {   
+            try 
+            {
+                ArrayList<Card> drawnDeck = this.deck.draw();
+                for (int i = 0; i < 3; i++) {
+                    this.hand.add(drawnDeck.get(i));
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            
+        }
+
         //Check Hp
         //ngecek jumlah deck
         if (this.hp <= 0 && this.deck.getNeff() <= 0)
@@ -76,9 +98,18 @@ public class Player {
     public void drawDeck(int choosenIndex, ArrayList<Card> drawnDeck) {
         try 
         {
-            // tanpa showDrawnDeck
-            this.hand.add(drawnDeck.get(choosenIndex));
-            //nambahin balik ke deck
+            // nanti coba tanpa showDrawnDeck
+            for (int i = 0; i < 3; i++) {
+                if (i == choosenIndex)
+                {
+                    this.hand.add(drawnDeck.get(choosenIndex));
+                }
+                else
+                {
+                    //nambahin balik ke deck
+                    this.deck.add(drawnDeck);
+                }
+            }
             this.deck.shuffle();
         }
         catch (Exception e)
@@ -103,7 +134,7 @@ public class Player {
 
     public void showHand(int i) { 
         // Bisa pass params index
-        // this.hand.show(i);
+        // this.hand.show(i);`
         try
         {
             this.hand.show(i);

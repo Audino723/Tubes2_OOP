@@ -24,7 +24,7 @@ public class Deck implements CardContainer {
     }
 
     public int getNeff() {
-        return this.neff;
+        return this.cards.size();
     }
 
     public void add(Card c) throws FullContainerException {
