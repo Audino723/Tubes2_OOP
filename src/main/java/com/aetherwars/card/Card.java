@@ -19,36 +19,35 @@ public abstract class Card {
     }
 
     // Getter
-    protected String getName() {
-        return this.name;
+    public return this.name;
     }
-    protected String getDesc() {
+    public String getDesc() {
         return this.desc;
     }
-    protected Type getType() {
+    public Type getType() {
         return this.type;
     }
-    protected String getImagePath() {
+    public String getImagePath() {
         return this.imagepath;
     }
-    protected int getMana() {
+    public int getMana() {
         return this.mana;
     }
 
     // Setter
-    protected void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
-    protected void setDesc(String desc) {
+    public void setDesc(String desc) {
         this.desc = desc;
     }
-    protected void setType(Type type) {
+    public void setType(Type type) {
         this.type = type;
     }
-    protected void setImagePath(String imagepath) {
+    public void setImagePath(String imagepath) {
         this.imagepath = imagepath;
     }
-    protected void setMana(int mana) {
+    public void setMana(int mana) {
         this.mana = mana;
     }
 

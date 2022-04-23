@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class LevelSpellCard extends SpellCard {
     public boolean increaseLevel; // True to increase, False for decrease
 
-    public LevelSpellCard(SpellBuilder builder) {
+    public LevelSpellCard(LevelSpellBuilder builder) {
         super(builder.name, builder.desc, Type.LVL, builder.imagepath, builder.mana, 0);
         this.increaseLevel = builder.increaseLevel;
     }
@@ -33,30 +33,30 @@ public class LevelSpellCard extends SpellCard {
         return effect;
     }
 
-    public static class SpellBuilder {
+    public static class LevelSpellBuilder {
         private boolean increaseLevel;
         private String name;
         private String desc;
         private String imagepath;
         private int mana;
     
-        public SpellBuilder setCardName(String name) {
+        public LevelSpellBuilder setCardName(String name) {
             this.name = name;return this;
         }
     
-        public SpellBuilder setCardDescription(String desc) {
+        public LevelSpellBuilder setCardDescription(String desc) {
             this.desc = desc;return this;
         }
     
-        public SpellBuilder setCardImagePath(String imagepath) {
+        public LevelSpellBuilder setCardImagePath(String imagepath) {
             this.imagepath = imagepath; return this;
         }
     
-        public SpellBuilder setCardMana(int mana) {
+        public LevelSpellBuilder setCardMana(int mana) {
             this.mana = mana; return this;
         }
 
-        public SpellBuilder setIncreaseLevel(boolean increaseLevel) {
+        public LevelSpellBuilder setIncreaseLevel(boolean increaseLevel) {
             this.increaseLevel = increaseLevel; return this;
         }
 

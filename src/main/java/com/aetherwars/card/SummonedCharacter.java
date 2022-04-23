@@ -13,6 +13,7 @@ public class SummonedCharacter {
     private ArrayList<PotionSpellCard> activePotions;
     private CharacterCard character;
     private int swapDurationLeft;
+    private int immuneLeft;
 
     // Constructor
     public SummonedCharacter(CharacterCard character, int level, int exp) {
@@ -22,6 +23,7 @@ public class SummonedCharacter {
         this.totalAttack = character.getBaseAtk() + (level - 1) * character.getAttackUp();
         this.totalHealth = character.getBaseHp() + (level - 1) * character.getHealthUp();
         this.activePotions = new ArrayList<>();
+        this.immuneLeft = 0;
     }
 
     // Getters and Setters
@@ -100,6 +102,10 @@ public class SummonedCharacter {
     }
 
     public int takeAttack(SummonedCharacter other) {
+        if(this.immuneLeft > 0) {
+            this.immuneLeft--;
+            return 0;
+        }
         int damage = other.getTotalAttack();
         int expAdded = other.getLevel();
 
@@ -178,7 +184,7 @@ public class SummonedCharacter {
         } else if (s.getType() == Type.LVL) {
             ret = s.giveEffect();
             int tempLevel = this.level;
-            int tempMana = this.character.getMana() - Math.ceil(tempLevel / 2);
+            int tempMana = Math.ceil(tempLevel / 2);
             tempLevel += (Integer) ret.get(0);
             if (tempLevel >= 1 && tempLevel <= 10 && tempMana >= 0) {
                 this.level = tempLevel;
@@ -188,13 +194,7 @@ public class SummonedCharacter {
                 System.out.println("Level out of range");
             }
             // If level = 1 and leveldown, level stays 1
-            // NO NEED this block of code
-            // if (this.isDead()) {
-            //     this.character.setHp(0);
-            //     this.activePotions.clear();
-            //     System.out.println("Character dead");
-            //     return;
-            // }
+            // Same for 10 and levelup
         } else if (s.getType() == Type.SWAP) {
             if (swapDurationLeft == 0) {
                 int temp = this.character.getBaseAtk();
@@ -209,7 +209,7 @@ public class SummonedCharacter {
                     return;
                 }
             }
-            this.swapDurationLeft = s.getDuration();
+            this.swapDurationLeft += s.getDuration();
         } else if (s.getType() == Type.MORPH) {
             ret = s.giveEffect();
             this.character.setName((String) ret.get(0));
@@ -227,6 +227,14 @@ public class SummonedCharacter {
             this.activePotions.clear();
             this.countTotalAttack();
             this.countTotalHealth();
+        }
+        else if (s.getType() == Type.IMMUNE){
+            ret = s.giveEffect();
+            int tempMana = Math.ceil(this.level / 2);
+            if (this.immuneLeft >= 0) {
+                this.immuneLeft += (Integer) ret.get(0);
+                this.character.setMana(tempMana);
+            }
         }
     }
 
