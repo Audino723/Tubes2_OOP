@@ -19,7 +19,8 @@ public abstract class Card {
     }
 
     // Getter
-    public return this.name;
+    public String getName() {
+        return this.name;
     }
     public String getDesc() {
         return this.desc;

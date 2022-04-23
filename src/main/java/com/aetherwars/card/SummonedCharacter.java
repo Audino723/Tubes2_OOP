@@ -78,11 +78,25 @@ public class SummonedCharacter {
         this.totalHealth += character.getHealthUp();
     }
 
+    public void updateLevel() {
+        while (this.exp >= this.getNextLevelExp()) {
+            this.level++;
+            this.exp -= this.getNextLevelExp();
+            this.totalAttack += character.getAttackUp();
+            this.totalHealth += character.getHealthUp();
+        }
+    }
+
+    public int getNextLevelExp() {
+        return (1 + (this.level - 1) * 2);
+    }
+
     public boolean isDead() {
         return this.totalHealth <= 0;
     }
 
-    // NO NEED TO UPDATE TOTAL HEALTH AND TOTAL ATTACK (INTEGRATED WHEN CALLING takeAttack() AND takeSpell())
+    // NO NEED TO UPDATE TOTAL HEALTH AND TOTAL ATTACK (INTEGRATED WHEN CALLING
+    // takeAttack() AND takeSpell())
     public void countTotalHealth() {
         // Counts the total health of the character upon using all active spells
         int totalHealth = this.character.getBaseHp() + (level - 1) * character.getHealthUp();
@@ -102,7 +116,7 @@ public class SummonedCharacter {
     }
 
     public int takeAttack(SummonedCharacter other) {
-        if(this.immuneLeft > 0) {
+        if (this.immuneLeft > 0) {
             this.immuneLeft--;
             return 0;
         }
@@ -142,6 +156,8 @@ public class SummonedCharacter {
         // To attack, just call attack(), no need calling takeAttack()
         this.exp += other.takeAttack(this);
         other.setExp(other.getExp() + this.takeAttack(other));
+        this.levelUp();
+        other.levelUp();
     }
 
     public void updatePotionsTime() {
@@ -184,7 +200,7 @@ public class SummonedCharacter {
         } else if (s.getType() == Type.LVL) {
             ret = s.giveEffect();
             int tempLevel = this.level;
-            int tempMana = Math.ceil(tempLevel / 2);
+            int tempMana = this.character.getMana() - (int) Math.ceil(tempLevel / 2);
             tempLevel += (Integer) ret.get(0);
             if (tempLevel >= 1 && tempLevel <= 10 && tempMana >= 0) {
                 this.level = tempLevel;
@@ -194,7 +210,13 @@ public class SummonedCharacter {
                 System.out.println("Level out of range");
             }
             // If level = 1 and leveldown, level stays 1
-            // Same for 10 and levelup
+            // NO NEED this block of code
+            // if (this.isDead()) {
+            // this.character.setHp(0);
+            // this.activePotions.clear();
+            // System.out.println("Character dead");
+            // return;
+            // }
         } else if (s.getType() == Type.SWAP) {
             if (swapDurationLeft == 0) {
                 int temp = this.character.getBaseAtk();
@@ -212,25 +234,10 @@ public class SummonedCharacter {
             this.swapDurationLeft += s.getDuration();
         } else if (s.getType() == Type.MORPH) {
             ret = s.giveEffect();
-            this.character.setName((String) ret.get(0));
-            this.character.setDesc((String) ret.get(1));
-            this.character.setType((Type) ret.get(2));
-            this.character.setImagePath((String) ret.get(3));
-            this.character.setMana((Integer) ret.get(4));
-            this.character.setAtk((Integer) ret.get(5));
-            this.character.setHp((Integer) ret.get(6));
-            this.character.setAttackUp((Integer) ret.get(7));
-            this.character.setHealthUp((Integer) ret.get(8));
-            this.level = 1;
-            this.exp = 0;
-            this.swapDurationLeft = 0;
-            this.activePotions.clear();
-            this.countTotalAttack();
-            this.countTotalHealth();
-        }
-        else if (s.getType() == Type.IMMUNE){
+            this.character = (CharacterCard) ret.get(0);
+        } else if (s.getType() == Type.IMMUNE) {
             ret = s.giveEffect();
-            int tempMana = Math.ceil(this.level / 2);
+            int tempMana = (int) Math.ceil(this.level / 2);
             if (this.immuneLeft >= 0) {
                 this.immuneLeft += (Integer) ret.get(0);
                 this.character.setMana(tempMana);

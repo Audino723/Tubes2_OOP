@@ -17,15 +17,7 @@ public class MorphSpellCard extends SpellCard {
     @Override
     ArrayList<Object> giveEffect() {
         ArrayList<Object> ret = new ArrayList<Object>();
-        ret.add(charToChange.getName());
-        ret.add(charToChange.getDesc());
-        ret.add(charToChange.getType());
-        ret.add(charToChange.getImagePath());
-        ret.add(charToChange.getMana());
-        ret.add(charToChange.getBaseAtk());
-        ret.add(charToChange.getBaseHp());
-        ret.add(charToChange.getAttackUp());
-        ret.add(charToChange.getHealthUp());
+        ret.add(this.charToChange);
         return ret;
     }
 
@@ -44,7 +36,6 @@ public class MorphSpellCard extends SpellCard {
     public static class MorphBuilder {
         private String name;
         private String desc;
-        private Type type;
         private String imagepath;
         private int mana;
         private CharacterCard charToChange;
