@@ -4,7 +4,7 @@ import com.aetherwars.util.Type;
 import java.util.ArrayList;
 
 public class LevelSpellCard extends SpellCard {
-    public boolean increaseLevel;
+    public boolean increaseLevel; // True to increase, False for decrease
 
     public LevelSpellCard(SpellBuilder builder) {
         super(builder.name, builder.desc, Type.LVL, builder.imagepath, builder.mana, 0);
