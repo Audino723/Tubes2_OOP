@@ -104,6 +104,10 @@ public class Hand implements CardContainer {
         }
     }
 
+    public Card getCard(int i){
+        return this.cards[i];
+    }
+
     // To debug
     public void showAll() {
 

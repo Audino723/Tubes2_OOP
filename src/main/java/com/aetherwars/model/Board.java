@@ -1,6 +1,7 @@
 package com.aetherwars.model;
 
 import com.aetherwars.card.Card;
+import com.aetherwars.card.CharacterCard;
 import com.aetherwars.card.SummonedCharacter;
 import com.aetherwars.exceptions.EmptyContainerException;
 import com.aetherwars.exceptions.FullContainerException;
@@ -22,8 +23,11 @@ public class Board {
     public void updateState() {
         /* PENTING!! UPDATE CHARACTER STATE SETIAP TURN */
         for (SummonedCharacter sc : this.characters) {
-            sc.updatePotionsTime();
+            if(sc != null){
+                sc.updatePotionsTime();
+            }
         }
+        
     }
 
     public void add(SummonedCharacter c) throws FullContainerException {
@@ -98,6 +102,14 @@ public class Board {
             throw new NoCardChosenException();
         } else {
             this.characters[i].show();
+        }
+    }
+
+    public CharacterCard getCharacter(int i){
+        if (this.characters[i] == null) {
+            return null;
+        } else {
+            return this.characters[i].getCharacter();
         }
     }
 

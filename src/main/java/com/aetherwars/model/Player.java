@@ -1,7 +1,10 @@
 package com.aetherwars.model;
 
 import com.aetherwars.card.Card;
+import com.aetherwars.card.CharacterCard;
 import com.aetherwars.card.SummonedCharacter;
+import com.aetherwars.card.SpellCard;
+import com.aetherwars.util.Type;
 
 import java.util.*;
 
@@ -14,7 +17,7 @@ public class Player {
     private Board board;
 
     // Nitip, nanti buat dipass ke deck
-    Player(String name, HashMap<String, Card> cdict) {
+    public Player(String name, HashMap<String, Card> cdict) {
         this.name = name;
         this.hp = 80;
         this.mana = 0;
@@ -54,7 +57,7 @@ public class Player {
     }
 
     public void setMana(int rounds){
-        this.mana = Math.max(10, rounds);
+        this.mana = Math.min(10, rounds);
     }
 
     public Boolean startTurn(int rounds) {
@@ -76,7 +79,9 @@ public class Player {
         }
 
         //Check Hp
-        //ngecek jumlah deck
+        //Ngecek jumlah deck
+        //Update states
+        this.board.updateState();
         if (this.hp <= 0 && this.deck.getNeff() <= 0)
         {
             return false;
@@ -102,6 +107,7 @@ public class Player {
             for (int i = 0; i < 3; i++) {
                 if (i == choosenIndex)
                 {
+                    this.hand.take(choosenIndex);
                     this.hand.add(drawnDeck.get(choosenIndex));
                 }
                 else
@@ -118,13 +124,48 @@ public class Player {
         }
     }
 
+    public char chooseCardonHand(int choosenIndex)
+    {
+        try
+        {
+            Card  c = this.hand.take(choosenIndex);
+            if (c instanceof CharacterCard) {
+                return 'C';
+            }
+            
+            if (c instanceof SpellCard)
+            {       
+                return 'S';        
+            }
+
+            this.hand.add(c, choosenIndex);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();   
+        }
+
+        //Ngeklik kartu kosong
+        return '0';
+    }
+
     public void handToBoard(int choosenIndex) {
         /*  Bisa kayak misal:
          *   this.board.add(hand.take());
          * */
         try
         {
-            this.board.add(this.hand.takeAsCharacter(choosenIndex));
+            Card  c = this.hand.take(choosenIndex);
+            if (c instanceof CharacterCard) {
+                CharacterCard characterCard = (CharacterCard) c;
+                SummonedCharacter summonedCharacter = new SummonedCharacter(characterCard, 1, 0);
+                this.board.add(summonedCharacter);
+            }
+            else
+            {
+                SpellCard spellCard = (SpellCard) c;
+                this.board.take(choosenIndex).takeSpell(spellCard);                
+            }
         }
         catch (Exception e)
         {
