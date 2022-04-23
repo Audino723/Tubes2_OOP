@@ -23,6 +23,9 @@ public class Deck implements CardContainer {
         }
     }
 
+    public int getNeff() {
+        return this.neff;
+    }
 
     public void add(Card c) throws FullContainerException {
         /* Menambahkan 1 kartu ke atas deck */

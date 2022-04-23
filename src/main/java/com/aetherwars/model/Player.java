@@ -1,6 +1,7 @@
 package com.aetherwars.model;
 
 import com.aetherwars.card.Card;
+import com.aetherwars.card.SummonedCharacter;
 
 import java.util.*;
 
@@ -51,20 +52,21 @@ public class Player {
         this.mana = Math.max(10, rounds);
     }
 
-    
-    public void startTurn(int rounds) {
+    public Boolean startTurn(int rounds) {
         //Check Hp
-        if (this.hp <= 0)
+        //ngecek jumlah deck
+        if (this.hp <= 0 && this.deck.getNeff() <= 0)
         {
-            //Player mati
+            return false;
         }
         
         // else
         setMana(rounds);
+        return true;
     }
 
     public ArrayList<Card> showDrawnDeck() {
-        /*  Mnampilkan drawn-deck */
+        /*  Menampilkan drawn-deck */
         
         ArrayList<Card> drawnDeck = this.deck.draw();
         return drawnDeck;
@@ -74,7 +76,9 @@ public class Player {
     public void drawDeck(int choosenIndex, ArrayList<Card> drawnDeck) {
         try 
         {
+            // tanpa showDrawnDeck
             this.hand.add(drawnDeck.get(choosenIndex));
+            //nambahin balik ke deck
             this.deck.shuffle();
         }
         catch (Exception e)
@@ -89,7 +93,7 @@ public class Player {
          * */
         try
         {
-            this.board.take(choosenIndex);
+            this.board.add(this.hand.takeAsCharacter(choosenIndex));
         }
         catch (Exception e)
         {
@@ -97,7 +101,8 @@ public class Player {
         }
     }
 
-    public void showHand(int i) { // Bisa pass params index
+    public void showHand(int i) { 
+        // Bisa pass params index
         // this.hand.show(i);
         try
         {
@@ -109,7 +114,8 @@ public class Player {
         }
     }
 
-    public void showBoard(int i) { // Bisa pass params index
+    public void showBoard(int i) { 
+        // Bisa pass params index
         // this.board.show(i);
         try
         {
@@ -121,11 +127,23 @@ public class Player {
         }
     }
 
-    public void takeAttack(Card c) {
-        
-    }
+    public void attack(Player p2, int index1, int index2) {
+        try
+        {
+            // Mengambil character dari board
+            SummonedCharacter playerChar = this.board.take(index1);
+            SummonedCharacter otherChar = p2.getBoard().take(index2);
 
-    public void attack(Player p, Card c) {
-        p.takeAttack(c);
+            // Attack other
+            playerChar.attack(otherChar);
+
+            // Mengembalikan board
+            this.board.add(playerChar, index1);
+            p2.getBoard().add(otherChar, index2);            
+        } 
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }        
     }
 }
