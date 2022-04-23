@@ -135,6 +135,7 @@ public class SummonedCharacter {
     public void attack(SummonedCharacter other) {
         // To attack, just call attack(), no need calling takeAttack()
         this.exp += other.takeAttack(this);
+        other.setExp(other.getExp() + this.takeAttack(other));
     }
 
     public void updatePotionsTime() {
@@ -176,14 +177,24 @@ public class SummonedCharacter {
             }
         } else if (s.getType() == Type.LVL) {
             ret = s.giveEffect();
-            this.level += (Integer) ret.get(0);
-            this.exp += (Integer) ret.get(1);
-            if (this.isDead()) {
-                this.character.setHp(0);
-                this.activePotions.clear();
-                System.out.println("Character dead");
-                return;
+            int tempLevel = this.level;
+            int tempMana = this.character.getMana() - Math.ceil(tempLevel / 2);
+            tempLevel += (Integer) ret.get(0);
+            if (tempLevel >= 1 && tempLevel <= 10 && tempMana >= 0) {
+                this.level = tempLevel;
+                this.character.setMana(tempMana);
+                this.exp = (Integer) ret.get(1);
+            } else {
+                System.out.println("Level out of range");
             }
+            // If level = 1 and leveldown, level stays 1
+            // NO NEED this block of code
+            // if (this.isDead()) {
+            //     this.character.setHp(0);
+            //     this.activePotions.clear();
+            //     System.out.println("Character dead");
+            //     return;
+            // }
         } else if (s.getType() == Type.SWAP) {
             if (swapDurationLeft == 0) {
                 int temp = this.character.getBaseAtk();
