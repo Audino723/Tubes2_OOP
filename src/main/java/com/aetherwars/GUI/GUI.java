@@ -1,7 +1,7 @@
 package com.aetherwars.GUI;
 
 import com.aetherwars.card.*;
-
+import com.aetherwars.model.Player;
 import com.aetherwars.util.CardReader;
 
 import javax.swing.*;
@@ -18,9 +18,10 @@ import java.util.HashMap;
 public class GUI{
     // Main Frame
     Player p1, p2;
-    int turn = 1;
+    int turn = 0;
     int phase = -1;
-    int current_player = 1;
+    int current_player = 2;
+    int current_mana = 0;
     JFrame window;
     Container container;
     CommandHandler commandHandler = new CommandHandler();
@@ -80,14 +81,7 @@ public class GUI{
     JPanel buttonpanel;
     DamageHandler damageHandler = new DamageHandler();
 
-    GUI(Player player1, Player player2) throws IOException, URISyntaxException {
-
-        // Reader
-        HashMap<String,Card> dict= new CardReader().read();
-        for (Card c : dict.values()){
-            c.show();
-        }
-
+    public GUI(Player player1, Player player2) throws IOException, URISyntaxException {
         // Crate Frame
         this.p1 = player1;
         this.p2 = player2;
@@ -389,7 +383,7 @@ public class GUI{
         this.DeckPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         this.DeckPanel.setLayout(new BorderLayout());
 
-        this.DeckLabel = new JLabel("<html>Deck<br><center>" + (37 - this.turn) + "/40</center></html>");
+        this.DeckLabel = new JLabel("<html>Deck<br><center>" + "40" + "/40</center></html>");
         this.DeckLabel.setFont(new Font("Arial", Font.BOLD, 20));
         this.DeckLabel.setHorizontalAlignment(SwingConstants.CENTER);
         this.DeckPanel.add(this.DeckLabel);
@@ -513,14 +507,43 @@ public class GUI{
     }
 
     public void update() {
-        // this.HealthBar1.setValue(this.p1.health);
-        // this.HealthBar2.setValue(this.p2.health);
-        this.turn = ((this.phase) / 8) + 1;
-        if (this.phase % 8 == 0) {
-            this.TurnLabel.setText("<html>Turn<br><center>" + this.turn + "</center></html>");
-            this.DeckLabel.setText(("<html>Deck<br><center>" + (37 - this.turn) + "/40</center></html>"));
-            this.ManaLabel.setText(("<html>Mana<br><center>" + Math.min(this.turn, 10) + "/" + Math.min(this.turn, 10)
-                    + "</center></html>"));
+        Player player;
+        if(this.current_player==1){
+            player = this.p1;
+        }
+        else{
+            player = this.p2;
+        }
+        this.TurnLabel.setText("<html>Turn<br><center>" + this.turn + "</center></html>");
+        this.DeckLabel.setText(("<html>Deck<br><center>" + player.getDeck().getNeff()+ "/40</center></html>"));
+        this.ManaLabel.setText(("<html>Mana<br><center>" + player.getMana() + "/" + this.current_mana+ "</center></html>"));
+    }
+
+    public void updateHand(){
+        if(this.current_player==1){
+            for (int i = 0; i < 5; i++) {
+                Card card = this.p1.getHand().getCard(i);
+                if(card!=null){
+                    this.HandCard[i].setText(card.getName());
+                    this.HandCard[i].setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + card.getImagePath()), 100, 100));
+                }
+                else{
+                    this.HandCard[i].setText("");
+                    this.HandCard[i].setIcon(null);
+                }
+            }
+        }
+        else{
+            for (int i = 0; i < 5; i++) {
+                Card card = this.p2.getHand().getCard(i);
+                if(card!=null){
+                    this.HandCard[i].setText(card.getName());
+                    this.HandCard[i].setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + card.getImagePath()), 100, 100));
+                }
+                else{
+                    this.HandCard[i].setText("");
+                }
+            }
         }
     }
 
@@ -553,8 +576,8 @@ public class GUI{
     }
 
     public void damageReceived() {
-        this.p1.health = this.p1.health - 10;
-        this.HealthBar1.setValue(this.p1.health);
+        //this.p1.health = this.p1.health - 10;
+        //this.HealthBar1.setValue(this.p1.health);
     }
 
     public class PhaseHandler implements ActionListener {
@@ -571,6 +594,11 @@ public class GUI{
         this.phase += 1;
         switch (this.phase % 8) {
             case 0:
+                changePlayer();
+                this.turn += 1;
+                this.p1.startTurn(this.turn);
+                this.current_mana = this.p1.getMana();
+                updateHand();
                 showDrawPhase();
                 break;
             case 1:
@@ -581,9 +609,12 @@ public class GUI{
                 break;
             case 3:
                 showEndPhase();
-                changePlayer();
                 break;
             case 4:
+                changePlayer();
+                this.p2.startTurn(this.turn);
+                this.current_mana = this.p2.getMana();
+                updateHand();
                 showDrawPhase();
                 break;
             case 5:
@@ -594,7 +625,6 @@ public class GUI{
                 break;
             case 7:
                 showEndPhase();
-                changePlayer();
                 break;
             default:
                 break;
@@ -698,69 +728,26 @@ public class GUI{
     }
 
     public void cardChoosen(String path){
-        if(path.equals("A1")){
-            this.PA1.setBorder(BorderFactory.createLineBorder(Color.decode("#1D63DC"),4));
+        int i = path.charAt(1) - 48;
+        if(path.charAt(0) == 'H'){
+            this.HandCard[i-1].setBorder(BorderFactory.createLineBorder(Color.decode("#1D63DC"),4));
         }
-        if(path.equals("B1")){
-            this.PB1.setBorder(BorderFactory.createLineBorder(Color.decode("#1D63DC"),4));
+        if(path.charAt(0) == 'A'){
+            this.P1Card[i].setBorder(BorderFactory.createLineBorder(Color.decode("#1D63DC"),4));
         }
-        if(path.equals("A2")){
-            this.PA2.setBorder(BorderFactory.createLineBorder(Color.decode("#1D63DC"),4));
-        }
-        if(path.equals("B2")){
-            this.PB2.setBorder(BorderFactory.createLineBorder(Color.decode("#1D63DC"),4));
-        }
-        if(path.equals("A3")){
-            this.PA3.setBorder(BorderFactory.createLineBorder(Color.decode("#1D63DC"),4));
-        }
-        if(path.equals("B3")){
-            this.PB3.setBorder(BorderFactory.createLineBorder(Color.decode("#1D63DC"),4));
-        }
-        if(path.equals("A4")){
-            this.PA4.setBorder(BorderFactory.createLineBorder(Color.decode("#1D63DC"),4));
-        }
-        if(path.equals("B4")){
-            this.PB4.setBorder(BorderFactory.createLineBorder(Color.decode("#1D63DC"),4));
-        }
-        if(path.equals("A5")){
-            this.PA5.setBorder(BorderFactory.createLineBorder(Color.decode("#1D63DC"),4));
-        }
-        if(path.equals("B5")){
-            this.PB5.setBorder(BorderFactory.createLineBorder(Color.decode("#1D63DC"),4));
-        }
-        if(path.equals("H1")){
-            this.Hand1Panel.setBorder(BorderFactory.createLineBorder(Color.decode("#1D63DC"),4));
-        }
-        if(path.equals("H2")){
-            this.Hand2Panel.setBorder(BorderFactory.createLineBorder(Color.decode("#1D63DC"),4));
-        }
-        if(path.equals("H3")){
-            this.Hand3Panel.setBorder(BorderFactory.createLineBorder(Color.decode("#1D63DC"),4));
-        }
-        if(path.equals("H4")){
-            this.Hand4Panel.setBorder(BorderFactory.createLineBorder(Color.decode("#1D63DC"),4));
-        }
-        if(path.equals("H5")){
-            this.Hand5Panel.setBorder(BorderFactory.createLineBorder(Color.decode("#1D63DC"),4));
+        if(path.charAt(0) == 'B'){
+            this.P2Card[i].setBorder(BorderFactory.createLineBorder(Color.decode("#1D63DC"),4));
         }
     }
 
     public void clearCardChoosen(){
-        this.PA1.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        this.PB1.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        this.PA2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        this.PB2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        this.PA3.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        this.PB3.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        this.PA4.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        this.PB4.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        this.PA5.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        this.PB5.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        this.Hand1Panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        this.Hand2Panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        this.Hand3Panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        this.Hand4Panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        this.Hand5Panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        for (int i = 0; i < 5; i++) {
+            this.HandCard[i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            this.P1Card[i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            this.P2Card[i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        }
+        this.P1Card[5].setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        this.P2Card[5].setBorder(BorderFactory.createLineBorder(Color.BLACK));
     }
 
     public class HoverHandler implements MouseListener {
@@ -790,17 +777,35 @@ public class GUI{
         }
     }
     public void showHover(String path){
-        if(path.matches("[H][1-5]")){
-            this.HoverTextArea.setText("Hand Card");
-            this.HoverImageLabel.setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + "logo.png"), 200, 200));
-        }
-        else if(path.matches("[A][1-5]")){
-            this.HoverTextArea.setText("Player 1 Board Card");
-            this.HoverImageLabel.setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + "player1.png"), 200, 200));
+        Player player;
+        if(current_player==1){
+            player = p1;
         }
         else{
-            this.HoverTextArea.setText("Player 2 Board Card");
-            this.HoverImageLabel.setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + "player2.png"), 200, 200));
+            player = p2;
+        }
+        int i = path.charAt(1) - 49;
+        if(path.charAt(0) == 'H'){
+            if(player.getHand().getCard(i)!=null){
+                this.HoverTextArea.setText(player.getHand().getCard(i).getName() + "\n" + player.getHand().getCard(i).getDesc());
+                this.HoverImageLabel.setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + player.getHand().getCard(i).getImagePath()), 200, 200));
+            }
+        }
+        if(path.charAt(0) == 'A'){
+            if(p1.getBoard().getCharacter(i)!=null){
+                if(i>0){
+                    this.HoverTextArea.setText(p1.getBoard().getCharacter(i).getName() + "\n" + p1.getBoard().getCharacter(i).getDesc());
+                    this.HoverImageLabel.setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + p1.getBoard().getCharacter(i).getImagePath()), 200, 200));
+                }
+            }
+        }
+        if(path.charAt(0) == 'B'){
+            if(p2.getBoard().getCharacter(i)!=null){
+                if(i>0){
+                    this.HoverTextArea.setText(p2.getBoard().getCharacter(i).getName() + "\n" + p2.getBoard().getCharacter(i).getDesc());
+                    this.HoverImageLabel.setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + p2.getBoard().getCharacter(i).getImagePath()), 200, 200));
+                }
+            }
         }
     }
 
