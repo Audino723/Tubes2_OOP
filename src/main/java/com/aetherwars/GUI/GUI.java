@@ -6,7 +6,6 @@ import com.aetherwars.util.CardReader;
 
 import javax.swing.*;
 
-
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -14,8 +13,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 
-
-public class GUI{
+public class GUI {
     // Main Frame
     Player p1, p2;
     int turn = 0;
@@ -64,7 +62,7 @@ public class GUI{
     JLabel HoverImageLabel;
     JTextArea HoverTextArea;
 
-    //Throw Card
+    // Throw Card
     JPanel ThrowPanel;
     JButton ThrowButton;
 
@@ -267,7 +265,7 @@ public class GUI{
 
         this.NextPhasePanel.add(this.NextPhaseButton);
 
-        //DrawPhase
+        // DrawPhase
         this.DrawPhasePanel = new JPanel();
         this.DrawPhasePanel.setBounds(0, 0, 1080, 720);
         this.DrawPhasePanel.setBackground(new Color(0.0f, 0.0f, 0.0f, 0.5f));
@@ -292,7 +290,8 @@ public class GUI{
         this.SkipDrawPanel = new JPanel();
         this.SkipDrawButton = new JButton();
         createDrawChoice(this.SkipDrawPanel, this.SkipDrawButton, 860, 210, "D0");
-        this.SkipDrawButton.setText("SKIP");;
+        this.SkipDrawButton.setText("SKIP");
+        ;
         this.SkipDrawPanel.add(this.SkipDrawButton);
 
         this.DrawPhasePanel.add(this.Draw1Panel);
@@ -361,7 +360,7 @@ public class GUI{
         this.HoverTextPanel.add(this.HoverTextArea);
         this.HoverPanel.add(this.HoverTextPanel);
 
-        //Throw Card
+        // Throw Card
         this.ThrowPanel = new JPanel();
         this.ThrowPanel.setBounds(960, 425, 100, 70);
         this.ThrowPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -446,6 +445,7 @@ public class GUI{
         this.HandCard[2] = this.Hand3Button;
         this.HandCard[3] = this.Hand4Button;
         this.HandCard[4] = this.Hand5Button;
+        showEndPhase();
         nextPhase();
     }
 
@@ -493,7 +493,7 @@ public class GUI{
         button.setActionCommand(name);
     }
 
-    private void createDrawChoice(JPanel panel, JButton button, int x, int y, String name){
+    private void createDrawChoice(JPanel panel, JButton button, int x, int y, String name) {
         panel.setBounds(x, y, 150, 300);
         panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         panel.setLayout(new BorderLayout());
@@ -508,39 +508,38 @@ public class GUI{
 
     public void update() {
         Player player;
-        if(this.current_player==1){
+        if (this.current_player == 1) {
             player = this.p1;
-        }
-        else{
+        } else {
             player = this.p2;
         }
         this.TurnLabel.setText("<html>Turn<br><center>" + this.turn + "</center></html>");
-        this.DeckLabel.setText(("<html>Deck<br><center>" + player.getDeck().getNeff()+ "/40</center></html>"));
-        this.ManaLabel.setText(("<html>Mana<br><center>" + player.getMana() + "/" + this.current_mana+ "</center></html>"));
+        this.DeckLabel.setText(("<html>Deck<br><center>" + player.getDeck().getNeff() + "/40</center></html>"));
+        this.ManaLabel
+                .setText(("<html>Mana<br><center>" + player.getMana() + "/" + this.current_mana + "</center></html>"));
     }
 
-    public void updateHand(){
-        if(this.current_player==1){
+    public void updateHand() {
+        if (this.current_player == 1) {
             for (int i = 0; i < 5; i++) {
                 Card card = this.p1.getHand().getCard(i);
-                if(card!=null){
+                if (card != null) {
                     this.HandCard[i].setText(card.getName());
-                    this.HandCard[i].setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + card.getImagePath()), 100, 100));
-                }
-                else{
-                    this.HandCard[i].setText("");
-                    this.HandCard[i].setIcon(null);
+                    this.HandCard[i]
+                            .setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + card.getImagePath()), 100, 100));
+                } else {
+                    this.HandCard[i].setVisible(false);
+                    ;
                 }
             }
-        }
-        else{
+        } else {
             for (int i = 0; i < 5; i++) {
                 Card card = this.p2.getHand().getCard(i);
-                if(card!=null){
+                if (card != null) {
                     this.HandCard[i].setText(card.getName());
-                    this.HandCard[i].setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + card.getImagePath()), 100, 100));
-                }
-                else{
+                    this.HandCard[i]
+                            .setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + card.getImagePath()), 100, 100));
+                } else {
                     this.HandCard[i].setText("");
                 }
             }
@@ -576,8 +575,8 @@ public class GUI{
     }
 
     public void damageReceived() {
-        //this.p1.health = this.p1.health - 10;
-        //this.HealthBar1.setValue(this.p1.health);
+        // this.p1.health = this.p1.health - 10;
+        // this.HealthBar1.setValue(this.p1.health);
     }
 
     public class PhaseHandler implements ActionListener {
@@ -647,13 +646,6 @@ public class GUI{
         this.EndPhaseLabel.setBackground(Color.WHITE);
         this.EndPhaseLabel.setForeground(Color.BLACK);
         this.DrawPhasePanel.setVisible(true);
-        for ( i = 0; i < 6; i++) {
-            this.P1Card[i].setEnabled(false);
-            this.P2Card[i].setEnabled(false);
-            if(i<5){
-                this.HandCard[i].setEnabled(false);
-            }
-        }
         this.NextPhaseButton.setEnabled(false);
         this.ThrowButton.setEnabled(false);
         this.HoverPanel.setVisible(false);
@@ -663,10 +655,13 @@ public class GUI{
     public void showPlanPhase() {
         int i;
         this.DrawPhasePanel.setVisible(false);
-        for ( i = 0; i < 6; i++) {
-            this.P1Card[i].setEnabled(true);
-            this.P2Card[i].setEnabled(true);
-            if(i<5){
+        for (i = 0; i < 6; i++) {
+            if (current_player == 1) {
+                this.P1Card[i].setEnabled(true);
+            } else {
+                this.P2Card[i].setEnabled(true);
+            }
+            if (i < 5) {
                 this.HandCard[i].setEnabled(true);
             }
         }
@@ -680,6 +675,16 @@ public class GUI{
     }
 
     public void showAttackPhase() {
+        for (int i = 0; i < 6; i++) {
+            if (current_player != 1) {
+                this.P1Card[i].setEnabled(true);
+            } else {
+                this.P2Card[i].setEnabled(true);
+            }
+        }
+        for (int i = 0; i < 5; i++) {
+            this.HandCard[i].setEnabled(false);
+        }
         this.PlanPhaseLabel.setBackground(Color.WHITE);
         this.PlanPhaseLabel.setForeground(Color.BLACK);
         this.AttackPhaseLabel.setBackground(Color.decode("#1D63DC"));
@@ -687,6 +692,13 @@ public class GUI{
     }
 
     public void showEndPhase() {
+        for (int i = 0; i < 6; i++) {
+            this.P1Card[i].setEnabled(false);
+            this.P2Card[i].setEnabled(false);
+            if (i < 5) {
+                this.HandCard[i].setEnabled(false);
+            }
+        }
         this.AttackPhaseLabel.setBackground(Color.WHITE);
         this.AttackPhaseLabel.setForeground(Color.BLACK);
         this.EndPhaseLabel.setBackground(Color.decode("#1D63DC"));
@@ -704,43 +716,65 @@ public class GUI{
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            int i = 0;
             if (this.command1 == null) {
                 this.command1 = e.getActionCommand();
                 System.out.println(this.command1);
-                if(this.command1.equals("TC")){
+                if (this.command1.equals("TC")) {
                     this.command1 = null;
-                }
-                else if(this.command1.matches("[D][0-3]")){
+                } else if (this.command1.charAt(0) == 'D') {
                     nextPhase();
                     this.command1 = null;
                 }
-                else{
+                if (command1 != null) {
                     cardChoosen(this.command1);
+                    i = command1.charAt(1) - 49;
+                    if (command1.charAt(0) == 'H') {
+                        if (current_player == 1) {
+                            if (p1.chooseCardonHand(i)=='C') {
+                                disableSiezedBoard();
+                            } else {
+                                disableEmptyBoard();
+                            }
+                        }
+                        else if (p2.chooseCardonHand(i)=='C') {
+                            disableSiezedBoard();
+                        } else {
+                            disableEmptyBoard();
+                        }
+                    }
+                    if (command1.charAt(0) == 'A') {
+
+                    }
+                    if (command1.charAt(0) == 'B') {
+
+                    }
                 }
             } else {
                 this.command2 = e.getActionCommand();
                 System.out.println(this.command1 + " + " + this.command2);
                 this.command1 = null;
                 this.command2 = null;
+                enableBoard(current_player);
                 clearCardChoosen();
             }
         }
     }
 
-    public void cardChoosen(String path){
+    public void cardChoosen(String path) {
         int i = path.charAt(1) - 48;
-        if(path.charAt(0) == 'H'){
-            this.HandCard[i-1].setBorder(BorderFactory.createLineBorder(Color.decode("#1D63DC"),4));
+        if (path.charAt(0) == 'H') {
+            this.HandCard[i - 1].setBorder(BorderFactory.createLineBorder(Color.decode("#1D63DC"), 4));
         }
-        if(path.charAt(0) == 'A'){
-            this.P1Card[i].setBorder(BorderFactory.createLineBorder(Color.decode("#1D63DC"),4));
+        if (path.charAt(0) == 'A') {
+            this.P1Card[i].setBorder(BorderFactory.createLineBorder(Color.decode("#1D63DC"), 4));
         }
-        if(path.charAt(0) == 'B'){
-            this.P2Card[i].setBorder(BorderFactory.createLineBorder(Color.decode("#1D63DC"),4));
+        if (path.charAt(0) == 'B') {
+            this.P2Card[i].setBorder(BorderFactory.createLineBorder(Color.decode("#1D63DC"), 4));
         }
     }
 
-    public void clearCardChoosen(){
+    public void clearCardChoosen() {
         for (int i = 0; i < 5; i++) {
             this.HandCard[i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
             this.P1Card[i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -750,11 +784,53 @@ public class GUI{
         this.P2Card[5].setBorder(BorderFactory.createLineBorder(Color.BLACK));
     }
 
+    public void disableEmptyBoard() {
+        for (int i = 0; i < 5; i++) {
+            if (this.current_player == 1) {
+                if (this.p1.getBoard().getCharacter(i) == null) {
+                    this.P1Card[i + 1].setEnabled(false);
+                }
+            } else {
+                if (this.p2.getBoard().getCharacter(i) == null) {
+                    this.P2Card[i + 1].setEnabled(false);
+                }
+            }
+        }
+    }
+
+    public void disableSiezedBoard() {
+        for (int i = 0; i < 5; i++) {
+            if (this.current_player == 1) {
+                if (this.p1.getBoard().getCharacter(i) != null) {
+                    this.P1Card[i + 1].setEnabled(false);
+                }
+            } else {
+                if (this.p2.getBoard().getCharacter(i) != null) {
+                    this.P2Card[i + 1].setEnabled(false);
+                }
+            }
+        }
+    }
+
+    public void enableBoard(int player_ke) {
+        if (player_ke == 1) {
+            for (int i = 0; i < 5; i++) {
+                this.P1Card[i+1].setEnabled(true);
+            }
+        } else {
+            for (int i = 0; i < 5; i++) {
+                this.P2Card[i+1].setEnabled(true);
+            }
+        }
+    }
+
     public class HoverHandler implements MouseListener {
         String path;
+
         HoverHandler(String path) {
             this.path = path;
         }
+
         @Override
         public void mouseClicked(MouseEvent e) {
         }
@@ -776,34 +852,40 @@ public class GUI{
         public void mouseExited(MouseEvent e) {
         }
     }
-    public void showHover(String path){
+
+    public void showHover(String path) {
         Player player;
-        if(current_player==1){
+        if (current_player == 1) {
             player = p1;
-        }
-        else{
+        } else {
             player = p2;
         }
         int i = path.charAt(1) - 49;
-        if(path.charAt(0) == 'H'){
-            if(player.getHand().getCard(i)!=null){
-                this.HoverTextArea.setText(player.getHand().getCard(i).getName() + "\n" + player.getHand().getCard(i).getDesc());
-                this.HoverImageLabel.setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + player.getHand().getCard(i).getImagePath()), 200, 200));
+        if (path.charAt(0) == 'H') {
+            if (player.getHand().getCard(i) != null) {
+                this.HoverTextArea.setText(player.getHand().getCard(i).getName() + "\n"
+                        + player.getHand().getCard(i).getType() + "\n" + player.getHand().getCard(i).getDesc());
+                this.HoverImageLabel.setIcon(scaleImage(
+                        new ImageIcon(Define.IMG_PATH + player.getHand().getCard(i).getImagePath()), 200, 200));
             }
         }
-        if(path.charAt(0) == 'A'){
-            if(p1.getBoard().getCharacter(i)!=null){
-                if(i>0){
-                    this.HoverTextArea.setText(p1.getBoard().getCharacter(i).getName() + "\n" + p1.getBoard().getCharacter(i).getDesc());
-                    this.HoverImageLabel.setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + p1.getBoard().getCharacter(i).getImagePath()), 200, 200));
+        if (path.charAt(0) == 'A') {
+            if (p1.getBoard().getCharacter(i) != null) {
+                if (i > 0) {
+                    this.HoverTextArea.setText(p1.getBoard().getCharacter(i).getName() + "\n"
+                            + p1.getBoard().getCharacter(i).getType() + "\n" + p1.getBoard().getCharacter(i).getDesc());
+                    this.HoverImageLabel.setIcon(scaleImage(
+                            new ImageIcon(Define.IMG_PATH + p1.getBoard().getCharacter(i).getImagePath()), 200, 200));
                 }
             }
         }
-        if(path.charAt(0) == 'B'){
-            if(p2.getBoard().getCharacter(i)!=null){
-                if(i>0){
-                    this.HoverTextArea.setText(p2.getBoard().getCharacter(i).getName() + "\n" + p2.getBoard().getCharacter(i).getDesc());
-                    this.HoverImageLabel.setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + p2.getBoard().getCharacter(i).getImagePath()), 200, 200));
+        if (path.charAt(0) == 'B') {
+            if (p2.getBoard().getCharacter(i) != null) {
+                if (i > 0) {
+                    this.HoverTextArea.setText(p2.getBoard().getCharacter(i).getName() + "\n"
+                            + p2.getBoard().getCharacter(i).getType() + "\n" + p2.getBoard().getCharacter(i).getDesc());
+                    this.HoverImageLabel.setIcon(scaleImage(
+                            new ImageIcon(Define.IMG_PATH + p2.getBoard().getCharacter(i).getImagePath()), 200, 200));
                 }
             }
         }

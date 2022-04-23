@@ -128,7 +128,7 @@ public class Player {
     {
         try
         {
-            Card  c = this.hand.take(choosenIndex);
+            Card  c = this.hand.getCard(choosenIndex);
             if (c instanceof CharacterCard) {
                 return 'C';
             }
@@ -137,8 +137,6 @@ public class Player {
             {       
                 return 'S';        
             }
-
-            this.hand.add(c, choosenIndex);
         }
         catch (Exception e)
         {
