@@ -54,6 +54,8 @@ public class GUI {
     JPanel DrawPhasePanel, Draw1Panel, Draw2Panel, Draw3Panel, SkipDrawPanel;
     JButton Draw1Button, Draw2Button, Draw3Button, SkipDrawButton;
     JButton[] DrawCard = new JButton[4];
+    JPanel HandFullPanel;
+    JLabel HandFullNotice;
 
     // Hand
     JPanel HandPanel, Hand1Panel, Hand2Panel, Hand3Panel, Hand4Panel, Hand5Panel;
@@ -294,13 +296,24 @@ public class GUI {
         this.SkipDrawButton = new JButton();
         createDrawChoice(this.SkipDrawPanel, this.SkipDrawButton, 860, 210, "D0");
         this.SkipDrawButton.setText("SKIP");
-        ;
         this.SkipDrawPanel.add(this.SkipDrawButton);
 
         this.DrawPhasePanel.add(this.Draw1Panel);
         this.DrawPhasePanel.add(this.Draw2Panel);
         this.DrawPhasePanel.add(this.Draw3Panel);
         this.DrawPhasePanel.add(this.SkipDrawPanel);
+
+        this.HandFullPanel = new JPanel();
+        this.HandFullPanel.setBounds(260, 100, 540, 270);
+        this.HandFullPanel.setLayout(new GridLayout(1,1));
+
+        this.HandFullNotice = new JLabel();
+        this.HandFullNotice.setFont(new Font("Arial", Font.BOLD, 20));
+        this.HandFullNotice.setText("<html><center>Hand Penuh, Silahkan Pilih kartu untuk dibuang!</center></html>");
+        this.HandFullNotice.setHorizontalAlignment(SwingConstants.CENTER);
+        this.HandFullPanel.add(this.HandFullNotice);
+        this.HandFullPanel.setVisible(false);
+
         // Hand
         this.HandPanel = new JPanel();
         this.HandPanel.setBounds(5, 445, 500, 200);
@@ -413,6 +426,7 @@ public class GUI {
         this.button.addActionListener(damageHandler);
         this.buttonpanel.add(this.button);
 
+        this.window.add(this.HandFullPanel);
         this.window.add(this.DrawPhasePanel);
         this.window.add(this.Board1);
         this.window.add(this.Board2);
@@ -770,6 +784,7 @@ public class GUI {
                     if(player.getHand().isFull()){
                         if(this.command1.charAt(1) != '0'){
                             showDrawFullPhase();
+                            HandFullPanel.setVisible(true);
                             NextPhaseButton.setEnabled(false);
                             ThrowButton.setEnabled(false);
                         }
@@ -809,6 +824,7 @@ public class GUI {
                 this.command2 = e.getActionCommand();
                 if(this.command1.charAt(0)=='D'){
                     player.replaceHandFromDraw(this.command1 +" + "+ this.command2);
+                    HandFullPanel.setVisible(false);
                     nextPhase();
                 }
                 System.out.println(this.command1 + " + " + this.command2);
