@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public class GUI {
     // Main Frame
     Player p1, p2;
+    int P1InitialDeckSize, P2InitialDeckSize;
     int turn = 10;
     int phase = -1;
     int current_player = 2;
@@ -54,8 +55,6 @@ public class GUI {
     JPanel DrawPhasePanel, Draw1Panel, Draw2Panel, Draw3Panel, SkipDrawPanel;
     JButton Draw1Button, Draw2Button, Draw3Button, SkipDrawButton;
     JButton[] DrawCard = new JButton[4];
-    JPanel HandFullPanel;
-    JLabel HandFullNotice;
 
     // Hand
     JPanel HandPanel, Hand1Panel, Hand2Panel, Hand3Panel, Hand4Panel, Hand5Panel;
@@ -79,10 +78,9 @@ public class GUI {
     JPanel ManaPanel;
     JButton ManaButton;
 
-    // Button buat testing healthbar
-    JButton button;
-    JPanel buttonpanel;
-    DamageHandler damageHandler = new DamageHandler();
+    //Notice Label
+    JPanel NoticePanel;
+    JLabel NoticeLabel;
 
     public GUI(Player player1, Player player2) throws IOException, URISyntaxException {
         // Crate Frame
@@ -301,16 +299,20 @@ public class GUI {
         this.DrawPhasePanel.add(this.Draw3Panel);
         this.DrawPhasePanel.add(this.SkipDrawPanel);
 
-        this.HandFullPanel = new JPanel();
-        this.HandFullPanel.setBounds(260, 100, 540, 270);
-        this.HandFullPanel.setLayout(new GridLayout(1,1));
+        this.NoticePanel = new JPanel();
+        this.NoticePanel.setBounds(260, 100, 540, 270);
+        this.NoticePanel.setLayout(new BorderLayout());
+        this.NoticePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-        this.HandFullNotice = new JLabel();
-        this.HandFullNotice.setFont(new Font("Arial", Font.BOLD, 20));
-        this.HandFullNotice.setText("<html><center>Hand Penuh, Silahkan Pilih kartu untuk dibuang!</center></html>");
-        this.HandFullNotice.setHorizontalAlignment(SwingConstants.CENTER);
-        this.HandFullPanel.add(this.HandFullNotice);
-        this.HandFullPanel.setVisible(false);
+        this.NoticeLabel = new JLabel();
+        this.NoticeLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        this.NoticeLabel.setText("<html><center>Hand Penuh, Silahkan Pilih kartu untuk dibuang!</center></html>");
+        this.NoticeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        this.NoticeLabel.setBackground(Color.decode("#1D63DC"));
+        this.NoticeLabel.setForeground(Color.WHITE);
+        this.NoticeLabel.setOpaque(true);
+        this.NoticePanel.add(this.NoticeLabel);
+        this.NoticePanel.setVisible(false);
 
         // Hand
         this.HandPanel = new JPanel();
@@ -369,6 +371,7 @@ public class GUI {
         this.HoverTextArea = new JTextArea();
         this.HoverTextArea.setLineWrap(true);
         this.HoverTextArea.setFont(new Font("Arial", Font.PLAIN, 16));
+        this.HoverTextArea.setEditable(false);
         this.HoverTextPanel.add(this.HoverTextArea);
         this.HoverPanel.add(this.HoverTextPanel);
 
@@ -416,19 +419,7 @@ public class GUI {
         this.ManaButton.setActionCommand("MN");
         this.ManaPanel.add(this.ManaButton);
 
-        // Tersting healthbar================================================
-        this.buttonpanel = new JPanel();
-        this.buttonpanel.setBounds(5, 0, 100, 30);
-        // this.container.add(this.buttonpanel);
-
-        this.button = new JButton("Forfeit");
-        this.button.setBackground(Color.RED);
-        this.button.setPreferredSize(new Dimension(100, 30));
-        this.button.setFocusPainted(false);
-        this.button.addActionListener(damageHandler);
-        this.buttonpanel.add(this.button);
-
-        this.window.add(this.HandFullPanel);
+        this.window.add(this.NoticePanel);
         this.window.add(this.DrawPhasePanel);
         this.window.add(this.Board1);
         this.window.add(this.Board2);
@@ -442,7 +433,6 @@ public class GUI {
         this.window.add(this.ThrowPanel);
         this.window.add(this.DeckPanel);
         this.window.add(this.ManaPanel);
-        this.window.add(this.buttonpanel);
         this.window.setVisible(true);
 
         this.P1Card[0] = this.A0Button;
@@ -470,9 +460,11 @@ public class GUI {
         this.DrawCard[2] = this.Draw2Button;
         this.DrawCard[3] = this.Draw3Button;
         
+        this.P1InitialDeckSize = p1.getDeck().getNeff();
+        this.P2InitialDeckSize = p2.getDeck().getNeff();
         this.p1.startTurn(1);
         this.p2.startTurn(1);
-        
+
         showEndPhase();
         nextPhase();
     }
@@ -538,11 +530,12 @@ public class GUI {
         Player player;
         if (this.current_player == 1) {
             player = this.p1;
+            this.DeckLabel.setText(("<html>Deck<br><center>" + player.getDeck().getNeff() + "/"+this.P1InitialDeckSize+"</center></html>"));
         } else {
             player = this.p2;
+            this.DeckLabel.setText(("<html>Deck<br><center>" + player.getDeck().getNeff() + "/"+this.P2InitialDeckSize+"</center></html>"));
         }
         this.TurnLabel.setText("<html><center>Player " + current_player +" <br>Turn<br>" + this.turn + "</center></html>");
-        this.DeckLabel.setText(("<html>Deck<br><center>" + player.getDeck().getNeff() + "/40</center></html>"));
         this.ManaButton
                 .setText(("<html>Mana<br><center>" + player.getMana() + "/" + this.current_mana + "</center></html>"));
     }
@@ -594,6 +587,34 @@ public class GUI {
         }
     }
 
+    void updatePlayerStatus(){
+        if(this.current_player==1){
+            if(this.p2.getBoard().isEmpty()){
+                this.P2Card[0].setEnabled(true); 
+            }
+            this.HealthBar2.setValue(p2.getHp());
+            if(p2.isPlayerDead()){
+                showEndPhase();
+                this.NoticeLabel.setText("<html>"+"Lumine Win"+"</html>");
+                this.NoticePanel.setVisible(true);
+                this.NextPhaseButton.setEnabled(false);
+            }
+        }
+        else{
+            if(this.p1.getBoard().isEmpty()){
+                this.P1Card[0].setEnabled(true);
+            }
+            this.HealthBar1.setValue(p1.getHp());
+            if(p1.isPlayerDead()){
+                showEndPhase();
+                this.NoticeLabel.setText("<html>"+"Ayaka Win"+"</html>");
+                this.NoticePanel.setVisible(true);
+                this.NextPhaseButton.setEnabled(false);
+            }
+            
+        }    
+    }
+
     class ReverseProgressBar extends JProgressBar {
         ReverseProgressBar(int a, int b) {
             super(a, b);
@@ -615,18 +636,6 @@ public class GUI {
         }
     }
 
-    public class DamageHandler implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            damageReceived();
-        }
-    }
-
-    public void damageReceived() {
-        // this.p1.health = this.p1.health - 10;
-        // this.HealthBar1.setValue(this.p1.health);
-    }
-
     public class PhaseHandler implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -639,6 +648,8 @@ public class GUI {
         this.commandHandler.command2 = null;
         clearCardChoosen();
         this.phase += 1;
+        update();
+        updateHand();
         switch (this.phase % 8) {
             case 0:
                 changePlayer();
@@ -671,6 +682,7 @@ public class GUI {
                 break;
             case 6:
                 showAttackPhase();
+
                 break;
             case 7:
                 showEndPhase();
@@ -678,8 +690,6 @@ public class GUI {
             default:
                 break;
         }
-        updateHand();
-        update();
     }
 
     public void changePlayer() {
@@ -715,10 +725,10 @@ public class GUI {
         this.DrawPhasePanel.setVisible(false);
         for (i = 0; i < 5; i++) {
             this.HandCard[i].setEnabled(true);
-
         }
         this.NextPhaseButton.setEnabled(true);
         this.ThrowButton.setEnabled(true);
+        this.ManaButton.setEnabled(true);
         this.HoverPanel.setVisible(true);
         this.DrawPhaseLabel.setBackground(Color.WHITE);
         this.DrawPhaseLabel.setForeground(Color.BLACK);
@@ -727,16 +737,14 @@ public class GUI {
     }
 
     public void showAttackPhase() {
-        for (int i = 0; i < 6; i++) {
-            if (current_player != 1) {
-                this.P1Card[i].setEnabled(true);
-            } else {
-                this.P2Card[i].setEnabled(true);
-            }
-        }
-        for (int i = 0; i < 5; i++) {
-            this.HandCard[i].setEnabled(false);
-        }
+        disableBoard(current_player - 1);
+        enableBoard(current_player);
+        disableHand();
+        disableEmptyBoard(current_player);
+        disableEmptyBoard(current_player-1);
+        updatePlayerStatus();
+        this.ThrowButton.setEnabled(false);
+        this.ManaButton.setEnabled(false);
         this.PlanPhaseLabel.setBackground(Color.WHITE);
         this.PlanPhaseLabel.setForeground(Color.BLACK);
         this.AttackPhaseLabel.setBackground(Color.decode("#1D63DC"));
@@ -790,29 +798,32 @@ public class GUI {
         public void actionPerformed(ActionEvent e) {
             int i = 0;
             Player player;
+            Player enemy;
             if(current_player==1){
                 player = p1;
+                enemy = p2;
             }
             else{
                 player = p2;
+                enemy = p1;
             }
             if (this.command1 == null) {
                 this.command1 = e.getActionCommand();
-                System.out.println(this.command1);
+                // System.out.println(this.command1);
                 if (this.command1.equals("TC")) {
                     this.command1 = null;
                 }
                 else if(this.command1.equals("MN")){
                     disableHand();
                     enableBoard(current_player);
-                    disableEmptyBoard();
+                    disableEmptyBoard(current_player);
                     ManaButton.setBorder(BorderFactory.createLineBorder(Color.WHITE, 4));
                 }
                 else if (this.command1.charAt(0) == 'D') {
                     if(player.getHand().isFull()){
                         if(this.command1.charAt(1) != '0'){
                             showDrawFullPhase();
-                            HandFullPanel.setVisible(true);
+                            NoticePanel.setVisible(true);
                             NextPhaseButton.setEnabled(false);
                             ThrowButton.setEnabled(false);
                             updateHand();
@@ -839,14 +850,16 @@ public class GUI {
                             disableSiezedBoard();
                         } else {
                             enableBoard(current_player);
-                            disableEmptyBoard();
+                            disableEmptyBoard(current_player);
                         }
                     }
                     if (command1.charAt(0) == 'A') {
-
+                        enableBoard(current_player-1);
+                        disableEmptyBoard(current_player-1);
                     }
                     if (command1.charAt(0) == 'B') {
-
+                        enableBoard(current_player-1);
+                        disableEmptyBoard(current_player-1);
                     }
                 }
             } else {
@@ -872,16 +885,33 @@ public class GUI {
                             this.command2 = null;
                         }
                 }else{
+                    System.out.println(this.command1 + " + " + this.command2);
                     if(this.command1.charAt(0)=='D'){
                         player.replaceHandFromDraw(this.command1 +" + "+ this.command2);
-                        HandFullPanel.setVisible(false);
+                        NoticePanel.setVisible(false);
                         nextPhase();
                     }
-                    
-                    System.out.println(this.command1 + " + " + this.command2);
-                    player.handToBoard(this.command1 + " + " + this.command2);
-                    updateBoard();
-                    updateHand();
+                    else if(this.command1.charAt(0)=='H'){
+                        player.handToBoard(this.command1 + " + " + this.command2);
+                        updateBoard();
+                        updateHand();
+                    }
+                    else{
+                        if(player.attack(enemy, this.command1 + " + " + this.command2)){
+                            updateBoard();
+                            updatePlayerStatus();
+                            disableBoard(current_player-1);
+                            i = command1.charAt(1) - 48;
+                            if(command1.charAt(0)=='A'){
+                                P1Card[i].setEnabled(false);
+                            }
+                            else{
+                                P2Card[i].setEnabled(false);
+                            }
+                        }
+                    }
+
+
                     update();
                     
                     this.command1 = null;
@@ -918,9 +948,9 @@ public class GUI {
         this.P2Card[5].setBorder(BorderFactory.createLineBorder(Color.BLACK));
     }
 
-    public void disableEmptyBoard() {
+    public void disableEmptyBoard(int player) {
         for (int i = 0; i < 5; i++) {
-            if (this.current_player == 1) {
+            if (player == 1) {
                 if (this.p1.getBoard().getCharacter(i) == null) {
                     this.P1Card[i + 1].setEnabled(false);
                 }

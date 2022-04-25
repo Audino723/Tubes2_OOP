@@ -20,6 +20,10 @@ public class Board {
         return this.neff;
     }
 
+    public Boolean isEmpty() {
+        return getNeff() == 0;
+    }
+
     public void updateState() {
         /* PENTING!! UPDATE CHARACTER STATE SETIAP TURN */
         for (SummonedCharacter sc : this.characters) {
@@ -27,8 +31,22 @@ public class Board {
                 sc.updatePotionsTime();
             }
         }
-        
     }
+
+    public void updateSummonedCharacter() {
+        // Ngecek summoned character yang udah mati
+        for (int i = 0; i < characters.length; i++) {
+            if (characters[i] != null)
+            {
+                if (characters[i].isDead())
+                {
+                    characters[i] = null;
+                    this.neff -= 1;
+                }
+            }
+        }
+    }
+
 
     public void add(SummonedCharacter c) throws FullContainerException {
         /* Add karakter di tempat kosong pertama */
@@ -126,7 +144,6 @@ public class Board {
         for (SummonedCharacter summonedCharacter : characters) {
             if (summonedCharacter != null){
                 summonedCharacter.show();
-                System.out.println();
             }
         }
     }

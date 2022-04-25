@@ -4,7 +4,12 @@ import com.aetherwars.card.Card;
 import com.aetherwars.card.CharacterCard;
 import com.aetherwars.card.SummonedCharacter;
 import com.aetherwars.card.SpellCard;
+import com.aetherwars.util.CommandType;
 import com.aetherwars.util.Type;
+
+import org.junit.AfterClass;
+
+import static org.junit.Assert.fail;
 
 import java.util.*;
 
@@ -29,6 +34,11 @@ public class Player {
     public String getName()
     {
         return this.name;
+    }
+
+    public void setHp(int hp)
+    {
+        this.hp = hp;
     }
 
     public int getHp()
@@ -56,11 +66,28 @@ public class Player {
         return this.deck;
     }
 
+    public Boolean isPlayerDead()
+    {        
+        if (this.hp <= 0 || this.deck.getNeff() <= 0)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public void updateBoard(){
+        /* Mengecek status summoned character pada board */ 
+        this.board.updateSummonedCharacter();
+    }
+
     public void setMana(int rounds){
+        /* Mengatur jumlah mana berdasarkan rounds */
         this.mana = Math.min(10, rounds);
     }
 
     public Boolean useMana(int mana){
+        /* Menggunakan mana (untuk level-up atau spell) */
         if (this.mana - mana >=0)
         {
             this.mana -= mana;
@@ -72,7 +99,9 @@ public class Player {
         }
     }
 
-    public Boolean startTurn(int rounds) {
+    public void startTurn(int rounds) {
+        /* Memulai Turn */
+
         // Check first round
         if (rounds == 1)
         {   
@@ -87,22 +116,17 @@ public class Player {
             {
                 e.printStackTrace();
             }
-            
         }
 
-        //Check Hp
-        //Ngecek jumlah deck
-        //Update states
+        /*
+            For every turn :
+            - Update spell states
+            - Update mana
+            - Shuffle deck
+        */
         this.board.updateState();
-        if (this.hp <= 0 && this.deck.getNeff() <= 0)
-        {
-            return false;
-        }
-        
-        // else
         setMana(rounds);
         this.deck.shuffle();
-        return true;
     }
 
     public ArrayList<Card> showDrawnDeck() {
@@ -112,6 +136,7 @@ public class Player {
         try
         {
             drawnDeck = this.deck.draw();
+            // setelah add jadi kebalik urutan pertamanya
             this.deck.add(drawnDeck);
         } catch (Exception e){
             e.printStackTrace();
@@ -121,6 +146,8 @@ public class Player {
     
 
     public void drawDeck(String command) {
+        /* Melakukan draw dari deck */
+
         int choosenIndex = (int) command.charAt(1) - 49;
         try 
         {
@@ -129,8 +156,6 @@ public class Player {
                 if (i == choosenIndex)
                 {
                     this.hand.add(drawnDeck.get(2-choosenIndex));
-                    //drawnDeck.get(2-choosenIndex).show();
-                    //System.out.println("^dipilih");
                 }
                 else
                 {
@@ -139,10 +164,6 @@ public class Player {
                 }
             }
             this.deck.shuffle();
-            for (int i = 0; i < this.hand.getNeff(); i++) {
-                //this.hand.show(i);
-                System.out.println();
-            }
         }
         catch (Exception e)
         {
@@ -151,7 +172,8 @@ public class Player {
     }
 
     public void replaceHandFromDraw(String command){
-        Integer[] indexes = this.playerCommandHandler("REPLACE_HAND_FROM_DRAW", command);
+        /* Melakukan draw dari deck ketika hand sudah penuh */
+        Integer[] indexes = this.playerCommandHandler(CommandType.REPLACE_HAND_FROM_DRAW, command);
 
         int choosenIndex = indexes[0];
         int placingIndex = indexes[1];
@@ -163,7 +185,6 @@ public class Player {
                 {
                     this.hand.take(placingIndex);
                     this.hand.add(drawnDeck.get(2-choosenIndex), placingIndex);
-                    //System.out.println();
                 }
                 else
                 {
@@ -178,6 +199,7 @@ public class Player {
 
     public char chooseCardonHand(int choosenIndex)
     {
+        /* Mengecek tipe kartu yang dipilih dari hand */
         try
         {
             Card  c = this.hand.getCard(choosenIndex);
@@ -200,14 +222,13 @@ public class Player {
     }
 
     public void handToBoard(String command) {
-        /*  Bisa kayak misal:
-         *   this.board.add(hand.take());
-         * */
+        /*  Mengambil kartu dari hand dan meletakkan ke board*/
 
-        Integer[] indexes = this.playerCommandHandler("DRAW_FROM_HAND_TO_BOARD", command);
+        Integer[] indexes = this.playerCommandHandler(CommandType.DRAW_FROM_HAND_TO_BOARD, command);
 
         if (indexes[0] == -1)
         {            
+            System.out.println("Gagal mensummmon character");
             return;
         }
 
@@ -224,7 +245,6 @@ public class Player {
                 return;
             }
 
-            System.out.println(c.getMana());
             if (c instanceof CharacterCard) {
                 CharacterCard characterCard = (CharacterCard) c;
                 SummonedCharacter summonedCharacter = new SummonedCharacter(characterCard, 1, 0);
@@ -246,12 +266,16 @@ public class Player {
     }
 
     public void levelUpSummonedWithMana(String command) {
-        Integer[] indexes = this.playerCommandHandler("LEVEL_UP_SUMMONED_WITH_MANA", command);
+        /* Melakukan level-up summoned-character dengan mana */
+
+        Integer[] indexes = this.playerCommandHandler(CommandType.LEVEL_UP_SUMMONED_WITH_MANA, command);
 
         int placingIndex = indexes[1];
 
         if (!useMana(1))
         {
+            // Command Tidak Tepat
+            System.out.println("Mana tidak cukup untuk menaikkan level characater");
             return;
         }
 
@@ -264,6 +288,118 @@ public class Player {
         {
             e.printStackTrace();   
         }
+    }
+
+    public Boolean attack(Player p2, String command) {
+        /* Melakukan attack ke player musuh */
+
+        Integer[] indexes = this.playerCommandHandler(CommandType.ATTACK_OTHER, command);
+        Boolean isAttackSuccess = false;
+
+        if (indexes[0] == -1)
+        {         
+            // Command Tidak Tepat   
+            System.out.println("Gagal menyerang");
+            return isAttackSuccess;
+        }
+
+        int choosenIndex = indexes[0];
+        int placingIndex = indexes[1];
+
+        try
+        {
+            if (placingIndex == -1)
+            {
+                // Menyerang player lawan
+                SummonedCharacter playerChar = this.board.getSummonedCharacter(choosenIndex);
+                p2.setHp(p2.getHp() - playerChar.getTotalAttack());        
+            }
+            else
+            {
+                // Mengambil character dari board
+                SummonedCharacter playerChar = this.board.getSummonedCharacter(choosenIndex);
+                SummonedCharacter otherChar = p2.getBoard().getSummonedCharacter(placingIndex);
+
+                // Attack other
+                playerChar.attack(otherChar);
+            }
+
+            this.updateBoard();
+            p2.updateBoard();
+
+            isAttackSuccess = true;
+        } 
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }        
+
+        return isAttackSuccess;
+    }
+
+    public Integer[] playerCommandHandler(CommandType type, String command){
+        /* Command Handling */
+
+        Integer[] indexes = new Integer[2];
+
+        switch(type) {
+            case DRAW_FROM_HAND_TO_BOARD:
+                if  (command.charAt(0) == 'H' && 
+                    command.substring(5,6).matches("[A|B]")) 
+                {
+                    indexes[0] = (int) command.charAt(1) - 49;
+                    indexes[1] = (int) command.charAt(6) - 49;
+                }
+                else
+                {
+                    indexes[0] = -1;
+                    indexes[1] = -1;
+                }
+                break;
+
+            case REPLACE_HAND_FROM_DRAW:
+                if (command.charAt(0) == 'D' && command.charAt(5) == 'H') {
+                    indexes[0] = (int) command.charAt(1) - 49;
+                    indexes[1] = (int) command.charAt(6) - 49;
+                }
+                else
+                {
+                    indexes[0] = -1;
+                    indexes[1] = -1;
+                }
+                break;
+            case LEVEL_UP_SUMMONED_WITH_MANA:
+                if  (command.substring(0,2).matches("MN") && 
+                    command.substring(5,6).matches("[A|B]")) 
+                {
+                    indexes[0] = -1;
+                    indexes[1] = (int) command.charAt(6) - 49;
+                }
+                else
+                {
+                    indexes[0] = -1;
+                    indexes[1] = -1;
+                }
+                break;
+            case ATTACK_OTHER:
+                // Character menyerang character lain
+                if  ((command.charAt(0) == 'A' && command.charAt(5) == 'B') ||
+                    (command.charAt(0) == 'B' && command.charAt(5) == 'A')) 
+                {
+                    indexes[0] = (int) command.charAt(1) - 49;
+                    indexes[1] = (int) command.charAt(6) - 49;
+                }
+                else
+                {
+                    indexes[0] = -1;
+                    indexes[1] = -1;
+                }
+                break;
+            default:
+              // code block
+          }
+
+        return indexes;
     }
 
     public void showHand(int i) { 
@@ -291,75 +427,4 @@ public class Player {
             e.printStackTrace();   
         }
     }
-
-    public void attack(Player p2, int index1, int index2) {
-        try
-        {
-            // Mengambil character dari board
-            SummonedCharacter playerChar = this.board.take(index1);
-            SummonedCharacter otherChar = p2.getBoard().take(index2);
-
-            // Attack other
-            playerChar.attack(otherChar);
-
-            // Mengembalikan board
-            this.board.add(playerChar, index1);
-            p2.getBoard().add(otherChar, index2);            
-        } 
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }        
-    }
-
-    public Integer[] playerCommandHandler(String type, String command){
-        Integer[] indexes = new Integer[2];
-
-        switch(type) {
-            case "DRAW_FROM_HAND_TO_BOARD":
-                if  (command.charAt(0) == 'H' && 
-                    command.substring(5,6).matches("[A|B]")) 
-                {
-                    indexes[0] = (int) command.charAt(1) - 49;
-                    indexes[1] = (int) command.charAt(6) - 49;
-                }
-                else
-                {
-                    indexes[0] = -1;
-                    indexes[1] = -1;
-                }
-                break;
-
-            case "REPLACE_HAND_FROM_DRAW":
-                if (command.charAt(0) == 'D' && command.charAt(5) == 'H') {
-                    indexes[0] = (int) command.charAt(1) - 49;
-                    indexes[1] = (int) command.charAt(6) - 49;
-                }
-                else
-                {
-                    indexes[0] = -1;
-                    indexes[1] = -1;
-                }
-                break;
-            case "LEVEL_UP_SUMMONED_WITH_MANA":
-            if  (command.substring(0,2).matches("MN") && 
-                command.substring(5,6).matches("[A|B]")) 
-                {
-                    indexes[0] = -1;
-                    indexes[1] = (int) command.charAt(6) - 49;
-                }
-                else
-                {
-                    indexes[0] = -1;
-                    indexes[1] = -1;
-                }
-                break;
-            default:
-              // code block
-          }
-
-        return indexes;
-    }
-
-
 }
