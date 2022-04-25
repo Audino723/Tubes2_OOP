@@ -19,7 +19,7 @@ public class GUI {
     // Main Frame
     Player p1, p2;
     int P1InitialDeckSize, P2InitialDeckSize;
-    int turn = 10;
+    int turn = 0;
     int phase = -1;
     int current_player = 2;
     int current_mana = 0;
@@ -462,8 +462,6 @@ public class GUI {
         
         this.P1InitialDeckSize = p1.getDeck().getNeff();
         this.P2InitialDeckSize = p2.getDeck().getNeff();
-        this.p1.startTurn(1);
-        this.p2.startTurn(1);
 
         showEndPhase();
         nextPhase();
@@ -653,6 +651,7 @@ public class GUI {
         switch (this.phase % 8) {
             case 0:
                 changePlayer();
+                update();
                 this.turn += 1;
                 this.p1.startTurn(this.turn);
                 this.current_mana = this.p1.getMana();
@@ -671,6 +670,7 @@ public class GUI {
                 break;
             case 4:
                 changePlayer();
+                update();
                 this.p2.startTurn(this.turn);
                 this.current_mana = this.p2.getMana();
                 updateHand();
