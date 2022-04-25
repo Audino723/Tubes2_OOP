@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 
+import java.util.ArrayList;
+
 public class GUI {
     // Main Frame
     Player p1, p2;
@@ -51,6 +53,7 @@ public class GUI {
     // Draw Phase
     JPanel DrawPhasePanel, Draw1Panel, Draw2Panel, Draw3Panel, SkipDrawPanel;
     JButton Draw1Button, Draw2Button, Draw3Button, SkipDrawButton;
+    JButton[] DrawCard = new JButton[4];
 
     // Hand
     JPanel HandPanel, Hand1Panel, Hand2Panel, Hand3Panel, Hand4Panel, Hand5Panel;
@@ -445,6 +448,11 @@ public class GUI {
         this.HandCard[2] = this.Hand3Button;
         this.HandCard[3] = this.Hand4Button;
         this.HandCard[4] = this.Hand5Button;
+
+        this.DrawCard[0] = this.SkipDrawButton;
+        this.DrawCard[1] = this.Draw1Button;
+        this.DrawCard[2] = this.Draw2Button;
+        this.DrawCard[3] = this.Draw3Button;
         showEndPhase();
         nextPhase();
     }
@@ -527,9 +535,9 @@ public class GUI {
                     this.HandCard[i].setText(card.getName());
                     this.HandCard[i]
                             .setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + card.getImagePath()), 100, 100));
+                    this.HandCard[i].setVisible(true);
                 } else {
                     this.HandCard[i].setVisible(false);
-                    ;
                 }
             }
         } else {
@@ -599,6 +607,7 @@ public class GUI {
                 this.current_mana = this.p1.getMana();
                 updateHand();
                 showDrawPhase();
+                showDrawChoice();
                 break;
             case 1:
                 showPlanPhase();
@@ -615,6 +624,7 @@ public class GUI {
                 this.current_mana = this.p2.getMana();
                 updateHand();
                 showDrawPhase();
+                showDrawChoice();
                 break;
             case 5:
                 showPlanPhase();
@@ -628,6 +638,7 @@ public class GUI {
             default:
                 break;
         }
+        updateHand();
         update();
     }
 
@@ -640,7 +651,6 @@ public class GUI {
     }
 
     public void showDrawPhase() {
-        int i;
         this.DrawPhaseLabel.setBackground(Color.decode("#1D63DC"));
         this.DrawPhaseLabel.setForeground(Color.WHITE);
         this.EndPhaseLabel.setBackground(Color.WHITE);
@@ -650,6 +660,13 @@ public class GUI {
         this.ThrowButton.setEnabled(false);
         this.HoverPanel.setVisible(false);
         this.window.repaint();
+    }
+
+    public void showDrawFullPhase(){
+        this.DrawPhasePanel.setVisible(false);
+        for (int index = 0; index < 5; index++) {
+            this.HandCard[index].setEnabled(true);
+        }
     }
 
     public void showPlanPhase() {
@@ -705,6 +722,26 @@ public class GUI {
         this.EndPhaseLabel.setForeground(Color.WHITE);
     }
 
+    public void showDrawChoice(){
+        Player player;
+        if(current_player==1){
+            player = p1;
+        }
+        else{
+            player = p2;
+        }
+        ArrayList<Card> choice = player.showDrawnDeck();
+        for (int i = 0; i < 3; i++) {
+            this.DrawCard[i+1].setEnabled(false);
+        }
+        for (int i = 0; i < 3;i++) {
+            Card card = choice.get(i);
+            this.DrawCard[i+1].setText(card.getName()+"\n"+card.getType());
+            this.DrawCard[i+1].setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + card.getImagePath()), 100, 100));
+            this.DrawCard[i+1].setEnabled(true);
+        }
+    }
+
     public class CommandHandler implements ActionListener {
         String command1;
         String command2;
@@ -717,30 +754,48 @@ public class GUI {
         @Override
         public void actionPerformed(ActionEvent e) {
             int i = 0;
+            Player player;
+            if(current_player==1){
+                player = p1;
+            }
+            else{
+                player = p2;
+            }
             if (this.command1 == null) {
                 this.command1 = e.getActionCommand();
                 System.out.println(this.command1);
                 if (this.command1.equals("TC")) {
                     this.command1 = null;
                 } else if (this.command1.charAt(0) == 'D') {
-                    nextPhase();
-                    this.command1 = null;
+                    if(player.getHand().isFull()){
+                        if(this.command1.charAt(1) != '0'){
+                            showDrawFullPhase();
+                            NextPhaseButton.setEnabled(false);
+                            ThrowButton.setEnabled(false);
+                        }
+                        else{
+                            nextPhase();
+                            this.command1 = null;
+                        }               
+                    }
+                    else{
+                        if(this.command1.charAt(1) != '0'){
+                            player.drawDeck(this.command1);
+                        }   
+                        nextPhase();
+                        this.command1 = null;
+                    }      
                 }
                 if (command1 != null) {
                     cardChoosen(this.command1);
                     i = command1.charAt(1) - 49;
                     if (command1.charAt(0) == 'H') {
                         if (current_player == 1) {
-                            if (p1.chooseCardonHand(i)=='C') {
+                            if (player.chooseCardonHand(i)=='C') {
                                 disableSiezedBoard();
                             } else {
                                 disableEmptyBoard();
                             }
-                        }
-                        else if (p2.chooseCardonHand(i)=='C') {
-                            disableSiezedBoard();
-                        } else {
-                            disableEmptyBoard();
                         }
                     }
                     if (command1.charAt(0) == 'A') {
@@ -752,6 +807,10 @@ public class GUI {
                 }
             } else {
                 this.command2 = e.getActionCommand();
+                if(this.command1.charAt(0)=='D'){
+                    player.replaceHandFromDraw(this.command1 +" + "+ this.command2);
+                    nextPhase();
+                }
                 System.out.println(this.command1 + " + " + this.command2);
                 this.command1 = null;
                 this.command2 = null;

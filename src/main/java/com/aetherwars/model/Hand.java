@@ -18,6 +18,10 @@ public class Hand implements CardContainer {
         return this.neff;
     }
 
+    public Boolean isFull() {
+        return this.neff >= 5;
+    }
+
     public void add(Card c) throws FullContainerException {
         /* Add card di tempat kosong pertama */
         if (this.neff == 5) {
@@ -26,6 +30,7 @@ public class Hand implements CardContainer {
             for (int i = 0; i < 5; i++) {
                 if (this.cards[i] == null) {
                     this.cards[i] = c;
+                    this.neff++;
                     return;
                 }
             }

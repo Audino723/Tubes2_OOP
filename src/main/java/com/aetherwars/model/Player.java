@@ -95,31 +95,70 @@ public class Player {
     public ArrayList<Card> showDrawnDeck() {
         /*  Menampilkan drawn-deck */
         
-        ArrayList<Card> drawnDeck = this.deck.draw();
+        ArrayList<Card> drawnDeck = new ArrayList<Card>();
+        try
+        {
+            drawnDeck = this.deck.draw();
+            this.deck.add(drawnDeck);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         return drawnDeck;
     }
     
 
-    public void drawDeck(int choosenIndex, ArrayList<Card> drawnDeck) {
+    public void drawDeck(String command) {
+        int choosenIndex = (int) command.charAt(1) - 49;
         try 
         {
-            // nanti coba tanpa showDrawnDeck
+            ArrayList<Card> drawnDeck = this.deck.draw();
             for (int i = 0; i < 3; i++) {
                 if (i == choosenIndex)
                 {
-                    this.hand.take(choosenIndex);
-                    this.hand.add(drawnDeck.get(choosenIndex));
+                    this.hand.add(drawnDeck.get(2-choosenIndex));
+                    drawnDeck.get(2-choosenIndex).show();
+                    System.out.println("^dipilih");
                 }
                 else
                 {
                     //nambahin balik ke deck
-                    this.deck.add(drawnDeck);
+                    this.deck.add(drawnDeck.get(2-i));
                 }
             }
             this.deck.shuffle();
+            for (int i = 0; i < this.hand.getNeff(); i++) {
+                //this.hand.show(i);
+                System.out.println();
+            }
         }
         catch (Exception e)
         {
+            e.printStackTrace();
+        }
+    }
+
+    public void replaceHandFromDraw(String command){
+        Integer[] indexes = this.playerCommandHandler("REPLACE_HAND_FROM_DRAW", command);
+
+        int choosenIndex = indexes[0];
+        int placingIndex = indexes[1];
+
+        try{
+            ArrayList<Card> drawnDeck = this.deck.draw();
+            for (int i = 0; i < 3; i++) {
+                if (i == choosenIndex)
+                {
+                    this.hand.take(placingIndex);
+                    this.hand.add(drawnDeck.get(2-choosenIndex), placingIndex);
+                    System.out.println();
+                }
+                else
+                {
+                    //nambahin balik ke deck
+                    this.deck.add(drawnDeck.get(2-i));
+                }
+            }
+        } catch (Exception e){
             e.printStackTrace();
         }
     }
@@ -147,10 +186,20 @@ public class Player {
         return '0';
     }
 
-    public void handToBoard(int choosenIndex) {
+    public void handToBoard(String command) {
         /*  Bisa kayak misal:
          *   this.board.add(hand.take());
          * */
+
+        Integer[] indexes = this.playerCommandHandler("DRAW_FROM_HAND_TO_BOARD", command);
+
+        if (indexes[0] == -1)
+        {
+            return;
+        }
+
+        int choosenIndex = indexes[0];
+        int placingIndex = indexes[1];
         try
         {
             Card  c = this.hand.take(choosenIndex);
@@ -216,4 +265,39 @@ public class Player {
             e.printStackTrace();
         }        
     }
+
+    public Integer[] playerCommandHandler(String type, String command){
+        Integer[] indexes = new Integer[2];
+        
+        switch(type) {
+            case "DRAW_FROM_HAND_TO_BOARD":
+                if (command.charAt(0) == 'H' && command.charAt(5) == 'A') {
+                    indexes[0] = (int) command.charAt(1) - 49;
+                    indexes[1] = (int) command.charAt(6) - 49;
+                }
+                else
+                {
+                    indexes[0] = -1;
+                    indexes[1] = -1;
+                }
+                break;
+            case "REPLACE_HAND_FROM_DRAW":
+                if (command.charAt(0) == 'D' && command.charAt(5) == 'H') {
+                    indexes[0] = (int) command.charAt(1) - 49;
+                    indexes[1] = (int) command.charAt(6) - 49;
+                }
+                else
+                {
+                    indexes[0] = -1;
+                    indexes[1] = -1;
+                }
+                break;
+            default:
+              // code block
+          }
+
+        return indexes;
+    }
+
+
 }
