@@ -78,10 +78,15 @@ public class SummonedCharacter {
         this.totalHealth += character.getHealthUp();
     }
 
+    public void addExp(int exp){
+        this.exp += exp;
+        updateLevel();
+    }
+
     public void updateLevel() {
         while (this.exp >= this.getNextLevelExp()) {
-            this.level++;
             this.exp -= this.getNextLevelExp();
+            this.level++;
             this.totalAttack += character.getAttackUp();
             this.totalHealth += character.getHealthUp();
         }

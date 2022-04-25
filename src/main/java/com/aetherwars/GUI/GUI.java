@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class GUI {
     // Main Frame
     Player p1, p2;
-    int turn = 0;
+    int turn = 10;
     int phase = -1;
     int current_player = 2;
     int current_mana = 0;
@@ -77,7 +77,7 @@ public class GUI {
 
     // Mana
     JPanel ManaPanel;
-    JLabel ManaLabel;
+    JButton ManaButton;
 
     // Button buat testing healthbar
     JButton button;
@@ -131,8 +131,6 @@ public class GUI {
         this.PA1 = new JPanel();
         this.A1Button = new JButton();
         createCardinBoard(this.PA1, this.A1Button, 130, 10, "A1");
-        this.A1Button.setIcon(scaleImage(image, 50, 50));
-        this.A1Button.setText("<html>EI<br>Lvl/Exp: 1[1/10]<br>Attack: 1<br>Health: 1</html>");
         this.PA1.add(this.A1Button);
         this.Board1.add(this.PA1);
 
@@ -323,8 +321,6 @@ public class GUI {
         this.Hand1Panel = new JPanel();
         this.Hand1Button = new JButton();
         createHand(this.Hand1Panel, this.Hand1Button, "H1");
-        this.Hand1Button.setIcon(scaleImage(image, 70, 70));
-        this.Hand1Button.setText("<html>EI<br>Attack: 1<br>Health: 1</html>");
         this.Hand1Panel.add(this.Hand1Button);
         this.HandPanel.add(this.Hand1Panel);
 
@@ -406,13 +402,19 @@ public class GUI {
         // Mana
         this.ManaPanel = new JPanel();
         this.ManaPanel.setBounds(960, 585, 100, 70);
-        this.ManaPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        this.ManaPanel.setLayout(new BorderLayout());
 
-        this.ManaLabel = new JLabel("<html>Mana<br><center>" + Math.min(this.turn, 10) + "/" + Math.min(this.turn, 10)
+        this.ManaButton = new JButton("<html>Mana<br><center>" + Math.min(this.turn, 10) + "/" + Math.min(this.turn, 10)
                 + "</center></html>");
-        this.ManaLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        this.ManaLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        this.ManaPanel.add(this.ManaLabel);
+        this.ManaButton.setFont(new Font("Arial", Font.BOLD, 20));
+        this.ManaButton.setHorizontalAlignment(SwingConstants.CENTER);
+         this.ManaButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        this.ManaButton.setForeground(Color.WHITE);
+        this.ManaButton.setBackground(Color.decode("#1D63DC"));
+        this.ManaButton.setFocusPainted(false);
+        this.ManaButton.addActionListener(this.commandHandler);
+        this.ManaButton.setActionCommand("MN");
+        this.ManaPanel.add(this.ManaButton);
 
         // Tersting healthbar================================================
         this.buttonpanel = new JPanel();
@@ -467,6 +469,10 @@ public class GUI {
         this.DrawCard[1] = this.Draw1Button;
         this.DrawCard[2] = this.Draw2Button;
         this.DrawCard[3] = this.Draw3Button;
+        
+        this.p1.startTurn(1);
+        this.p2.startTurn(1);
+        
         showEndPhase();
         nextPhase();
     }
@@ -535,35 +541,55 @@ public class GUI {
         } else {
             player = this.p2;
         }
-        this.TurnLabel.setText("<html>Turn<br><center>" + this.turn + "</center></html>");
+        this.TurnLabel.setText("<html><center>Player " + current_player +" <br>Turn<br>" + this.turn + "</center></html>");
         this.DeckLabel.setText(("<html>Deck<br><center>" + player.getDeck().getNeff() + "/40</center></html>"));
-        this.ManaLabel
+        this.ManaButton
                 .setText(("<html>Mana<br><center>" + player.getMana() + "/" + this.current_mana + "</center></html>"));
     }
 
     public void updateHand() {
+        Player player;
         if (this.current_player == 1) {
-            for (int i = 0; i < 5; i++) {
-                Card card = this.p1.getHand().getCard(i);
-                if (card != null) {
-                    this.HandCard[i].setText(card.getName());
-                    this.HandCard[i]
-                            .setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + card.getImagePath()), 100, 100));
-                    this.HandCard[i].setVisible(true);
-                } else {
-                    this.HandCard[i].setVisible(false);
-                }
+            player = p1;
+        }
+        else{
+            player = p2;
+        }
+        for (int i = 0; i < 5; i++) {
+            Card card = player.getHand().getCard(i);
+            if (card != null) {
+                this.HandCard[i].setText("<html>"+card.getName()+"<br>Mana: " + card.getMana());
+                this.HandCard[i]
+                        .setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + card.getImagePath()), 100, 100));
+                this.HandCard[i].setVisible(true);
+                this.HandCard[i].setEnabled(true);
+            } else {
+                this.HandCard[i].setText(null);
+                this.HandCard[i].setIcon(null);
+                this.HandCard[i].setVisible(false);
             }
-        } else {
-            for (int i = 0; i < 5; i++) {
-                Card card = this.p2.getHand().getCard(i);
-                if (card != null) {
-                    this.HandCard[i].setText(card.getName());
-                    this.HandCard[i]
-                            .setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + card.getImagePath()), 100, 100));
-                } else {
-                    this.HandCard[i].setText("");
-                }
+        }
+    }
+
+    public void updateBoard(){
+        for (int i = 1; i < 6; i++) {
+            SummonedCharacter p1Card = p1.getBoard().getSummonedCharacter(i-1);
+            SummonedCharacter p2Card = p2.getBoard().getSummonedCharacter(i-1);
+            if(p1Card!=null){
+                this.P1Card[i].setText("<html>"+p1Card.getCharacter().getName()+"<br>Hp: "+p1Card.getTotalHealth()+"<br>Att: " + p1Card.getTotalAttack() + "<br>"+p1Card.getExp()+"/"+p1Card.getNextLevelExp()+" ["+p1Card.getLevel()+"]</html>");
+                this.P1Card[i].setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + p1Card.getCharacter().getImagePath()), 40, 40));
+            }
+            else{
+                this.P1Card[i].setText(null);
+                this.P1Card[i].setIcon(null);
+            }
+            if(p2Card!=null){
+                this.P2Card[i].setText("<html>"+p2Card.getCharacter().getName()+"<br>Hp: "+p2Card.getTotalHealth()+"<br>Att: " + p2Card.getTotalAttack() + "<br>"+p2Card.getExp()+"/"+p2Card.getNextLevelExp()+" ["+p2Card.getLevel()+"]</html>");
+                this.P2Card[i].setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + p2Card.getCharacter().getImagePath()), 40, 40));
+            }
+            else{
+                this.P2Card[i].setText(null);
+                this.P2Card[i].setIcon(null);
             }
         }
     }
@@ -680,21 +706,16 @@ public class GUI {
         this.DrawPhasePanel.setVisible(false);
         for (int index = 0; index < 5; index++) {
             this.HandCard[index].setEnabled(true);
+            this.HandCard[index].setVisible(true);
         }
     }
 
     public void showPlanPhase() {
         int i;
         this.DrawPhasePanel.setVisible(false);
-        for (i = 0; i < 6; i++) {
-            if (current_player == 1) {
-                this.P1Card[i].setEnabled(true);
-            } else {
-                this.P2Card[i].setEnabled(true);
-            }
-            if (i < 5) {
-                this.HandCard[i].setEnabled(true);
-            }
+        for (i = 0; i < 5; i++) {
+            this.HandCard[i].setEnabled(true);
+
         }
         this.NextPhaseButton.setEnabled(true);
         this.ThrowButton.setEnabled(true);
@@ -780,13 +801,21 @@ public class GUI {
                 System.out.println(this.command1);
                 if (this.command1.equals("TC")) {
                     this.command1 = null;
-                } else if (this.command1.charAt(0) == 'D') {
+                }
+                else if(this.command1.equals("MN")){
+                    disableHand();
+                    enableBoard(current_player);
+                    disableEmptyBoard();
+                    ManaButton.setBorder(BorderFactory.createLineBorder(Color.WHITE, 4));
+                }
+                else if (this.command1.charAt(0) == 'D') {
                     if(player.getHand().isFull()){
                         if(this.command1.charAt(1) != '0'){
                             showDrawFullPhase();
                             HandFullPanel.setVisible(true);
                             NextPhaseButton.setEnabled(false);
                             ThrowButton.setEnabled(false);
+                            updateHand();
                         }
                         else{
                             nextPhase();
@@ -805,12 +834,12 @@ public class GUI {
                     cardChoosen(this.command1);
                     i = command1.charAt(1) - 49;
                     if (command1.charAt(0) == 'H') {
-                        if (current_player == 1) {
-                            if (player.chooseCardonHand(i)=='C') {
-                                disableSiezedBoard();
-                            } else {
-                                disableEmptyBoard();
-                            }
+                        if (player.chooseCardonHand(i)=='C') {
+                            enableBoard(current_player);
+                            disableSiezedBoard();
+                        } else {
+                            enableBoard(current_player);
+                            disableEmptyBoard();
                         }
                     }
                     if (command1.charAt(0) == 'A') {
@@ -822,16 +851,46 @@ public class GUI {
                 }
             } else {
                 this.command2 = e.getActionCommand();
-                if(this.command1.charAt(0)=='D'){
-                    player.replaceHandFromDraw(this.command1 +" + "+ this.command2);
-                    HandFullPanel.setVisible(false);
-                    nextPhase();
+                if(this.command1.equals("MN")){
+                    if(!this.command2.equals("MN")){
+                        if(current_player==1){
+                            p1.levelUpSummonedWithMana(this.command1+" + "+this.command2);
+                            System.out.println(this.command1 + " + " + this.command2);
+                        }
+                        else{
+                            p2.levelUpSummonedWithMana(this.command1+" + "+this.command2);
+                            System.out.println(this.command1 + " + " + this.command2);
+                        }
+                        updateBoard();
+                            update();
+                            this.command2 = null;
+                    }
+                    else{
+                            ManaButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                            enableHand();
+                            this.command1 = null;
+                            this.command2 = null;
+                        }
+                }else{
+                    if(this.command1.charAt(0)=='D'){
+                        player.replaceHandFromDraw(this.command1 +" + "+ this.command2);
+                        HandFullPanel.setVisible(false);
+                        nextPhase();
+                    }
+                    
+                    System.out.println(this.command1 + " + " + this.command2);
+                    player.handToBoard(this.command1 + " + " + this.command2);
+                    updateBoard();
+                    updateHand();
+                    update();
+                    
+                    this.command1 = null;
+                    this.command2 = null;
+                    if(phase%4 == 1){
+                        disableBoard(current_player);
+                    }
+                    clearCardChoosen();
                 }
-                System.out.println(this.command1 + " + " + this.command2);
-                this.command1 = null;
-                this.command2 = null;
-                enableBoard(current_player);
-                clearCardChoosen();
             }
         }
     }
@@ -887,6 +946,18 @@ public class GUI {
         }
     }
 
+    public void disableBoard(int player_ke) {
+        if (player_ke == 1) {
+            for (int i = 0; i < 5; i++) {
+                this.P1Card[i+1].setEnabled(false);
+            }
+        } else {
+            for (int i = 0; i < 5; i++) {
+                this.P2Card[i+1].setEnabled(false);
+            }
+        }
+    }
+
     public void enableBoard(int player_ke) {
         if (player_ke == 1) {
             for (int i = 0; i < 5; i++) {
@@ -896,6 +967,18 @@ public class GUI {
             for (int i = 0; i < 5; i++) {
                 this.P2Card[i+1].setEnabled(true);
             }
+        }
+    }
+
+    public void disableHand(){
+        for (int index = 0; index < 5; index++) {
+            this.HandCard[index].setEnabled(false);
+        }
+    }
+
+    public void enableHand(){
+        for (int index = 0; index < 5; index++) {
+            this.HandCard[index].setEnabled(true);
         }
     }
 
@@ -937,30 +1020,31 @@ public class GUI {
         }
         int i = path.charAt(1) - 49;
         if (path.charAt(0) == 'H') {
-            if (player.getHand().getCard(i) != null) {
-                this.HoverTextArea.setText(player.getHand().getCard(i).getName() + "\n"
-                        + player.getHand().getCard(i).getType() + "\n" + player.getHand().getCard(i).getDesc());
+            Card card = player .getHand().getCard(i);
+            if (card != null) {
+                this.HoverTextArea.setText(card.getName() + "\n\nType: "
+                        + card.getType() + "\nMana: "+ card.getMana() +"\n\n" +card.getDesc());
                 this.HoverImageLabel.setIcon(scaleImage(
                         new ImageIcon(Define.IMG_PATH + player.getHand().getCard(i).getImagePath()), 200, 200));
             }
         }
         if (path.charAt(0) == 'A') {
-            if (p1.getBoard().getCharacter(i) != null) {
+            SummonedCharacter card = p1.getBoard().getSummonedCharacter(i);
+            if (card!=null) {
                 if (i > 0) {
-                    this.HoverTextArea.setText(p1.getBoard().getCharacter(i).getName() + "\n"
-                            + p1.getBoard().getCharacter(i).getType() + "\n" + p1.getBoard().getCharacter(i).getDesc());
+                    this.HoverTextArea.setText(card.getCharacter().getName()+"\n\nHealth: "+card.getTotalHealth()+"\nAttack: "+card.getTotalAttack()+"\nexp[lvl]: "+card.getExp()+"/"+card.getNextLevelExp()+" ["+card.getLevel()+"]\n\n"+card.getCharacter().getDesc());
                     this.HoverImageLabel.setIcon(scaleImage(
-                            new ImageIcon(Define.IMG_PATH + p1.getBoard().getCharacter(i).getImagePath()), 200, 200));
+                            new ImageIcon(Define.IMG_PATH + card.getCharacter().getImagePath()), 200, 200));
                 }
             }
         }
         if (path.charAt(0) == 'B') {
-            if (p2.getBoard().getCharacter(i) != null) {
+            SummonedCharacter card = p2.getBoard().getSummonedCharacter(i);
+            if (card != null) {
                 if (i > 0) {
-                    this.HoverTextArea.setText(p2.getBoard().getCharacter(i).getName() + "\n"
-                            + p2.getBoard().getCharacter(i).getType() + "\n" + p2.getBoard().getCharacter(i).getDesc());
+                    this.HoverTextArea.setText(card.getCharacter().getName()+"\n\nHealth: "+card.getTotalHealth()+"\nAttack: "+card.getTotalAttack()+"\nexp[lvl]: "+card.getExp()+"/"+card.getNextLevelExp()+" ["+card.getLevel()+"]\n\n"+card.getCharacter().getDesc());
                     this.HoverImageLabel.setIcon(scaleImage(
-                            new ImageIcon(Define.IMG_PATH + p2.getBoard().getCharacter(i).getImagePath()), 200, 200));
+                            new ImageIcon(Define.IMG_PATH + card.getCharacter().getImagePath()), 200, 200));
                 }
             }
         }

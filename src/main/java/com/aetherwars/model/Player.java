@@ -60,6 +60,18 @@ public class Player {
         this.mana = Math.min(10, rounds);
     }
 
+    public Boolean useMana(int mana){
+        if (this.mana - mana >=0)
+        {
+            this.mana -= mana;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public Boolean startTurn(int rounds) {
         // Check first round
         if (rounds == 1)
@@ -89,6 +101,7 @@ public class Player {
         
         // else
         setMana(rounds);
+        this.deck.shuffle();
         return true;
     }
 
@@ -116,8 +129,8 @@ public class Player {
                 if (i == choosenIndex)
                 {
                     this.hand.add(drawnDeck.get(2-choosenIndex));
-                    drawnDeck.get(2-choosenIndex).show();
-                    System.out.println("^dipilih");
+                    //drawnDeck.get(2-choosenIndex).show();
+                    //System.out.println("^dipilih");
                 }
                 else
                 {
@@ -150,7 +163,7 @@ public class Player {
                 {
                     this.hand.take(placingIndex);
                     this.hand.add(drawnDeck.get(2-choosenIndex), placingIndex);
-                    System.out.println();
+                    //System.out.println();
                 }
                 else
                 {
@@ -194,25 +207,58 @@ public class Player {
         Integer[] indexes = this.playerCommandHandler("DRAW_FROM_HAND_TO_BOARD", command);
 
         if (indexes[0] == -1)
-        {
+        {            
             return;
         }
 
         int choosenIndex = indexes[0];
         int placingIndex = indexes[1];
         try
-        {
+        {   
+            // Ambil kartu karakter dan cek penggunaan mana
             Card  c = this.hand.take(choosenIndex);
+            if (!useMana(c.getMana()))
+            {
+                System.out.println("kurang mana woi");
+                this.hand.add(c, choosenIndex);
+                return;
+            }
+
+            System.out.println(c.getMana());
             if (c instanceof CharacterCard) {
                 CharacterCard characterCard = (CharacterCard) c;
                 SummonedCharacter summonedCharacter = new SummonedCharacter(characterCard, 1, 0);
-                this.board.add(summonedCharacter);
+                this.board.add(summonedCharacter, placingIndex);
+
+                //DEBUG
+                this.board.showAll();
             }
             else
             {
                 SpellCard spellCard = (SpellCard) c;
-                this.board.take(choosenIndex).takeSpell(spellCard);                
+                this.board.getSummonedCharacter(placingIndex).takeSpell(spellCard);                
             }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();   
+        }
+    }
+
+    public void levelUpSummonedWithMana(String command) {
+        Integer[] indexes = this.playerCommandHandler("LEVEL_UP_SUMMONED_WITH_MANA", command);
+
+        int placingIndex = indexes[1];
+
+        if (!useMana(1))
+        {
+            return;
+        }
+
+        try
+        {   
+            SummonedCharacter summonedCharacter = this.board.getSummonedCharacter(placingIndex);
+            summonedCharacter.addExp(1);
         }
         catch (Exception e)
         {
@@ -268,10 +314,12 @@ public class Player {
 
     public Integer[] playerCommandHandler(String type, String command){
         Integer[] indexes = new Integer[2];
-        
+
         switch(type) {
             case "DRAW_FROM_HAND_TO_BOARD":
-                if (command.charAt(0) == 'H' && command.charAt(5) == 'A') {
+                if  (command.charAt(0) == 'H' && 
+                    command.substring(5,6).matches("[A|B]")) 
+                {
                     indexes[0] = (int) command.charAt(1) - 49;
                     indexes[1] = (int) command.charAt(6) - 49;
                 }
@@ -281,9 +329,23 @@ public class Player {
                     indexes[1] = -1;
                 }
                 break;
+
             case "REPLACE_HAND_FROM_DRAW":
                 if (command.charAt(0) == 'D' && command.charAt(5) == 'H') {
                     indexes[0] = (int) command.charAt(1) - 49;
+                    indexes[1] = (int) command.charAt(6) - 49;
+                }
+                else
+                {
+                    indexes[0] = -1;
+                    indexes[1] = -1;
+                }
+                break;
+            case "LEVEL_UP_SUMMONED_WITH_MANA":
+            if  (command.substring(0,2).matches("MN") && 
+                command.substring(5,6).matches("[A|B]")) 
+                {
+                    indexes[0] = -1;
                     indexes[1] = (int) command.charAt(6) - 49;
                 }
                 else

@@ -113,9 +113,22 @@ public class Board {
         }
     }
 
+    public SummonedCharacter getSummonedCharacter(int i){
+        if (this.characters[i] == null) {
+            return null;
+        } else {
+            return this.characters[i];
+        }
+    }
+
     // To debug
     public void showAll() {
-
+        for (SummonedCharacter summonedCharacter : characters) {
+            if (summonedCharacter != null){
+                summonedCharacter.show();
+                System.out.println();
+            }
+        }
     }
 
 }
