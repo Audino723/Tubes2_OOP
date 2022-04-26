@@ -15,6 +15,8 @@ import java.util.HashMap;
 
 import java.util.ArrayList;
 
+import java.lang.Math;
+
 public class GUI {
     // Main Frame
     Player p1, p2;
@@ -82,6 +84,11 @@ public class GUI {
     JPanel NoticePanel;
     JLabel NoticeLabel;
 
+    //Window Size   
+    Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+    int width = (int)size.getWidth();
+    int height = (int)size.getHeight();
+
     public GUI(Player player1, Player player2) throws IOException, URISyntaxException {
         // Crate Frame
         this.p1 = player1;
@@ -89,23 +96,23 @@ public class GUI {
 
         ImageIcon image = new ImageIcon(Define.IMG_PATH + "logo.png");
         this.window = new JFrame();
-        this.window.setSize(1080, 720);
+        this.window.setSize(width, height);
         this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.window.setTitle("NgOOP 2.0");
         this.window.setIconImage(image.getImage());
-        this.window.setResizable(false);
+        //this.window.setResizable(false);
         this.window.setLayout(null);
         // this.container = this.window.getContentPane();
+
 
         // Player
         // 1==========================================================================================
         // Create Healthbar
         this.HealthBarPanel1 = new JPanel();
-        this.HealthBarPanel1.setBounds(5, 30, 400, 80);
-        // this.container.add(this.HealthBarPanel1);
+        this.HealthBarPanel1.setBounds(Math.floorDiv(width, 216), Math.floorDiv(height, 24), Math.floorDiv(10*width, 27), Math.floorDiv(height, 9));
 
         this.HealthBar1 = new JProgressBar(0, 80);
-        this.HealthBar1.setPreferredSize(new Dimension(400, 40));
+        this.HealthBar1.setPreferredSize(new Dimension(Math.floorDiv(10*width, 27), Math.floorDiv(height, 18)));
         this.HealthBar1.setForeground(Color.GREEN);
         this.HealthBar1.setValue(80);
         this.HealthBarPanel1.add(this.HealthBar1);
@@ -115,44 +122,43 @@ public class GUI {
 
         // board
         this.Board1 = new JPanel();
-        this.Board1.setBounds(5, 100, 520, 270);
-        // this.Board1.setBackground(Color.BLACK);
+        this.Board1.setBounds(Math.floorDiv(width, 216), Math.floorDiv(5*height, 36), Math.floorDiv(13*width, 27), Math.floorDiv(3*height, 8));
         this.Board1.setLayout(null);
 
         this.PA0 = new JPanel();
         this.A0Button = new JButton();
-        createCardinBoard(this.PA0, this.A0Button, 0, 90, "A0");
-        this.A0Button.setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + "player1.png"), 120, 120));
+        createCardinBoard(this.PA0, this.A0Button, 0, Math.floorDiv(height, 8), "A0");
+        this.A0Button.setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + "player1.png"), Math.floorDiv(width, 9), Math.floorDiv(height, 6)));
         this.PA0.add(this.A0Button);
         this.Board1.add(this.PA0);
 
         this.PA1 = new JPanel();
         this.A1Button = new JButton();
-        createCardinBoard(this.PA1, this.A1Button, 130, 10, "A1");
+        createCardinBoard(this.PA1, this.A1Button, Math.floorDiv(13*width, 108), Math.floorDiv(height, 72), "A1");
         this.PA1.add(this.A1Button);
         this.Board1.add(this.PA1);
 
         this.PA2 = new JPanel();
         this.A2Button = new JButton();
-        createCardinBoard(this.PA2, this.A2Button, 260, 10, "A2");
+        createCardinBoard(this.PA2, this.A2Button, Math.floorDiv(13*width, 54), Math.floorDiv(height, 72), "A2");
         this.PA2.add(this.A2Button);
         this.Board1.add(this.PA2);
 
         this.PA3 = new JPanel();
         this.A3Button = new JButton();
-        createCardinBoard(this.PA3, this.A3Button, 130, 140, "A3");
+        createCardinBoard(this.PA3, this.A3Button, Math.floorDiv(13*width, 108), Math.floorDiv(7*height, 36), "A3");
         this.PA3.add(this.A3Button);
         this.Board1.add(this.PA3);
 
         this.PA4 = new JPanel();
         this.A4Button = new JButton();
-        createCardinBoard(this.PA4, this.A4Button, 260, 140, "A4");
+        createCardinBoard(this.PA4, this.A4Button, Math.floorDiv(13*width, 54), Math.floorDiv(7*height, 36), "A4");
         this.PA4.add(this.A4Button);
         this.Board1.add(this.PA4);
 
         this.PA5 = new JPanel();
         this.A5Button = new JButton();
-        createCardinBoard(this.PA5, this.A5Button, 390, 80, "A5");
+        createCardinBoard(this.PA5, this.A5Button, Math.floorDiv(13*width, 36), Math.floorDiv(height, 9), "A5");
         this.PA5.add(this.A5Button);
         this.Board1.add(this.PA5);
 
@@ -160,10 +166,10 @@ public class GUI {
         // 2==========================================================================================
         // Create Healthbar
         this.HealthBarPanel2 = new JPanel();
-        this.HealthBarPanel2.setBounds(660, 30, 400, 80);
+        this.HealthBarPanel2.setBounds(Math.floorDiv(11*width, 18), Math.floorDiv(height, 24), Math.floorDiv(10*width, 27), Math.floorDiv(height, 9));
 
         this.HealthBar2 = new ReverseProgressBar(0, 80);
-        this.HealthBar2.setPreferredSize(new Dimension(400, 40));
+        this.HealthBar2.setPreferredSize(new Dimension(Math.floorDiv(10*width, 27), Math.floorDiv(height, 18)));
         this.HealthBar2.setForeground(Color.GREEN);
         this.HealthBar2.setValue(80);
         this.HealthBarPanel2.add(this.HealthBar2);
@@ -173,44 +179,44 @@ public class GUI {
 
         // board
         this.Board2 = new JPanel();
-        this.Board2.setBounds(540, 100, 520, 270);
+        this.Board2.setBounds(Math.floorDiv(width, 2), Math.floorDiv(10*height, 72), Math.floorDiv(13*width, 27), Math.floorDiv(3*height, 8));
         // this.Board2.setBackground(Color.BLACK);
         this.Board2.setLayout(null);
 
         this.PB0 = new JPanel();
         this.B0Button = new JButton();
-        createCardinBoard(this.PB0, this.B0Button, 400, 90, "B0");
-        this.B0Button.setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + "player2.png"), 120, 120));
+        createCardinBoard(this.PB0, this.B0Button, Math.floorDiv(10*width, 27), Math.floorDiv(height, 8), "B0");
+        this.B0Button.setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + "player2.png"), Math.floorDiv(width, 9), Math.floorDiv(height, 6)));
         this.PB0.add(this.B0Button);
         this.Board2.add(this.PB0);
 
         this.PB1 = new JPanel();
         this.B1Button = new JButton();
-        createCardinBoard(this.PB1, this.B1Button, 270, 10, "B1");
+        createCardinBoard(this.PB1, this.B1Button, Math.floorDiv(width, 4), Math.floorDiv(height, 72), "B1");
         this.PB1.add(this.B1Button);
         this.Board2.add(this.PB1);
 
         this.PB2 = new JPanel();
         this.B2Button = new JButton();
-        createCardinBoard(this.PB2, this.B2Button, 140, 10, "B2");
+        createCardinBoard(this.PB2, this.B2Button, Math.floorDiv(7*width, 54), Math.floorDiv(height, 72), "B2");
         this.PB2.add(this.B2Button);
         this.Board2.add(this.PB2);
 
         this.PB3 = new JPanel();
         this.B3Button = new JButton();
-        createCardinBoard(this.PB3, this.B3Button, 270, 140, "B3");
+        createCardinBoard(this.PB3, this.B3Button, Math.floorDiv(width, 4), Math.floorDiv(7*height, 36), "B3");
         this.PB3.add(this.B3Button);
         this.Board2.add(this.PB3);
 
         this.PB4 = new JPanel();
         this.B4Button = new JButton();
-        createCardinBoard(this.PB4, this.B4Button, 140, 140, "B4");
+        createCardinBoard(this.PB4, this.B4Button, Math.floorDiv(7*width, 54), Math.floorDiv(7*height, 36), "B4");
         this.PB4.add(this.B4Button);
         this.Board2.add(this.PB4);
 
         this.PB5 = new JPanel();
         this.B5Button = new JButton();
-        createCardinBoard(this.PB5, this.B5Button, 10, 80, "B5");
+        createCardinBoard(this.PB5, this.B5Button, Math.floorDiv(width, 108), Math.floorDiv(height, 9), "B5");
         this.PB5.add(this.B5Button);
         this.Board2.add(this.PB5);
 
@@ -219,21 +225,21 @@ public class GUI {
         // Turn
         // this.TurnPanel = new CirclePanel();
         this.TurnPanel = new JPanel();
-        this.TurnPanel.setBounds(485, 5, 90, 90);
+        this.TurnPanel.setBounds(Math.floorDiv(97*width, 216), Math.floorDiv(height, 144), Math.floorDiv(width, 12), Math.floorDiv(height, 8));
         this.TurnPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         this.TurnPanel.setLayout(new BorderLayout());
 
         this.TurnLabel = new JLabel("<html>Turn<br><center>" + this.turn + "</center></html>");
-        this.TurnLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        this.TurnLabel.setFont(new Font("Arial", Font.BOLD, Math.floorDiv(20*width,1080)));
         this.TurnLabel.setHorizontalAlignment(SwingConstants.CENTER);
         this.TurnPanel.add(this.TurnLabel);
 
         // Phase
         this.PhasePanel = new JPanel();
-        this.PhasePanel.setBounds(5, 380, 940, 30);
+        this.PhasePanel.setBounds(Math.floorDiv(width, 216), Math.floorDiv(19*height, 36), Math.floorDiv(47*width, 54), Math.floorDiv(height, 24));
         this.PhasePanel.setLayout(new GridLayout(1, 4));
 
-        this.DrawPhaseLabel = new JLabel("Draw");
+        this.DrawPhaseLabel = new JLabel("Draw"); 
         createPhase(this.DrawPhaseLabel);
         this.DrawPhaseLabel.setBackground(Color.decode("#1D63DC"));
         this.DrawPhaseLabel.setForeground(Color.WHITE);
@@ -254,11 +260,11 @@ public class GUI {
         this.PhasePanel.setVisible(true);
 
         this.NextPhasePanel = new JPanel();
-        this.NextPhasePanel.setBounds(960, 380, 100, 30);
+        this.NextPhasePanel.setBounds(Math.floorDiv(8*width, 9), Math.floorDiv(19*height, 36), Math.floorDiv(5*width, 54), Math.floorDiv(height, 24));
         this.NextPhasePanel.setLayout(new BorderLayout());
 
         this.NextPhaseButton = new JButton(">>");
-        this.NextPhaseButton.setFont(new Font("Arial", Font.BOLD, 20));
+        this.NextPhaseButton.setFont(new Font("Arial", Font.BOLD, Math.floorDiv(20*width,1080)));
         this.NextPhaseButton.setForeground(Color.WHITE);
         this.NextPhaseButton.setBackground(Color.decode("#1D63DC"));
         this.NextPhaseButton.setFocusPainted(false);
@@ -268,29 +274,29 @@ public class GUI {
 
         // DrawPhase
         this.DrawPhasePanel = new JPanel();
-        this.DrawPhasePanel.setBounds(0, 0, 1080, 720);
+        this.DrawPhasePanel.setBounds(0, 0, width, height);
         this.DrawPhasePanel.setBackground(new Color(0.0f, 0.0f, 0.0f, 0.5f));
         this.DrawPhasePanel.setLayout(null);
         this.DrawPhasePanel.setVisible(false);
 
         this.Draw1Panel = new JPanel();
         this.Draw1Button = new JButton();
-        createDrawChoice(this.Draw1Panel, this.Draw1Button, 50, 210, "D1");
+        createDrawChoice(this.Draw1Panel, this.Draw1Button, Math.floorDiv(5*width, 108), Math.floorDiv(7*height, 24), "D1");
         this.Draw1Panel.add(this.Draw1Button);
 
         this.Draw2Panel = new JPanel();
         this.Draw2Button = new JButton();
-        createDrawChoice(this.Draw2Panel, this.Draw2Button, 320, 210, "D2");
+        createDrawChoice(this.Draw2Panel, this.Draw2Button, Math.floorDiv(8*width, 27), Math.floorDiv(7*height, 24), "D2");
         this.Draw2Panel.add(this.Draw2Button);
 
         this.Draw3Panel = new JPanel();
         this.Draw3Button = new JButton();
-        createDrawChoice(this.Draw3Panel, this.Draw3Button, 580, 210, "D3");
+        createDrawChoice(this.Draw3Panel, this.Draw3Button, Math.floorDiv(29*width, 54), Math.floorDiv(7*height, 24), "D3");
         this.Draw3Panel.add(this.Draw3Button);
 
         this.SkipDrawPanel = new JPanel();
         this.SkipDrawButton = new JButton();
-        createDrawChoice(this.SkipDrawPanel, this.SkipDrawButton, 860, 210, "D0");
+        createDrawChoice(this.SkipDrawPanel, this.SkipDrawButton, Math.floorDiv(43*width, 54), Math.floorDiv(7*height, 24), "D0");
         this.SkipDrawButton.setText("SKIP");
         this.SkipDrawPanel.add(this.SkipDrawButton);
 
@@ -300,12 +306,12 @@ public class GUI {
         this.DrawPhasePanel.add(this.SkipDrawPanel);
 
         this.NoticePanel = new JPanel();
-        this.NoticePanel.setBounds(260, 100, 540, 270);
+        this.NoticePanel.setBounds(Math.floorDiv(13*width, 54), Math.floorDiv(5*height, 36), Math.floorDiv(width, 2), Math.floorDiv(3*height, 8));
         this.NoticePanel.setLayout(new BorderLayout());
         this.NoticePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-        this.NoticeLabel = new JLabel();
-        this.NoticeLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        this.NoticeLabel = new JLabel(); 
+        this.NoticeLabel.setFont(new Font("Arial", Font.BOLD, Math.floorDiv(24*width,1080)));
         this.NoticeLabel.setText("<html><center>Hand Penuh, Silahkan Pilih kartu untuk dibuang!</center></html>");
         this.NoticeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         this.NoticeLabel.setBackground(Color.decode("#1D63DC"));
@@ -316,7 +322,7 @@ public class GUI {
 
         // Hand
         this.HandPanel = new JPanel();
-        this.HandPanel.setBounds(5, 445, 500, 200);
+        this.HandPanel.setBounds(Math.floorDiv(width, 216), Math.floorDiv(89*height, 144), Math.floorDiv(25*width, 54), Math.floorDiv(5*height, 18));
         this.HandPanel.setLayout(new GridLayout(1, 5));
         this.HandPanel.setBackground(Color.black);
 
@@ -352,12 +358,12 @@ public class GUI {
 
         // Hover
         this.HoverPanel = new JPanel();
-        this.HoverPanel.setBounds(515, 425, 430, 250);
+        this.HoverPanel.setBounds(Math.floorDiv(103*width, 216), Math.floorDiv(85*height, 144), Math.floorDiv(43*width, 108), Math.floorDiv(25*height, 72));
         // this.HoverPanel.setBackground(Color.black);
         this.HoverPanel.setLayout(null);
 
         this.HoverImagePanel = new JPanel();
-        this.HoverImagePanel.setBounds(0, 0, 200, 250);
+        this.HoverImagePanel.setBounds(0, 0, Math.floorDiv(5*width, 27), Math.floorDiv(25*height, 72));
         this.HoverImagePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         this.HoverImagePanel.setLayout(new BorderLayout());
         this.HoverImageLabel = new JLabel();
@@ -365,24 +371,24 @@ public class GUI {
         this.HoverPanel.add(this.HoverImagePanel);
 
         this.HoverTextPanel = new JPanel();
-        this.HoverTextPanel.setBounds(210, 0, 220, 250);
+        this.HoverTextPanel.setBounds(Math.floorDiv(7*width, 36), 0, Math.floorDiv(11*width, 54), Math.floorDiv(25*height, 72));
         this.HoverTextPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         this.HoverTextPanel.setLayout(new BorderLayout());
         this.HoverTextArea = new JTextArea();
         this.HoverTextArea.setLineWrap(true);
-        this.HoverTextArea.setFont(new Font("Arial", Font.PLAIN, 16));
+        this.HoverTextArea.setFont(new Font("Arial", Font.PLAIN, Math.floorDiv(16*width,1080)));
         this.HoverTextArea.setEditable(false);
         this.HoverTextPanel.add(this.HoverTextArea);
         this.HoverPanel.add(this.HoverTextPanel);
 
         // Throw Card
         this.ThrowPanel = new JPanel();
-        this.ThrowPanel.setBounds(960, 425, 100, 70);
+        this.ThrowPanel.setBounds(Math.floorDiv(8*width, 9), Math.floorDiv(85*height, 144), Math.floorDiv(5*width, 54), Math.floorDiv(7*height, 72));
         this.ThrowPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         this.ThrowPanel.setLayout(new BorderLayout());
 
         this.ThrowButton = new JButton("<html>Throw<br><center>Card</center></html>");
-        this.ThrowButton.setFont(new Font("Arial", Font.BOLD, 20));
+        this.ThrowButton.setFont(new Font("Arial", Font.BOLD, Math.floorDiv(20*width,1080)));
         this.ThrowButton.setHorizontalAlignment(SwingConstants.CENTER);
         this.ThrowButton.setForeground(Color.WHITE);
         this.ThrowButton.setBackground(Color.RED);
@@ -393,23 +399,23 @@ public class GUI {
 
         // Deck
         this.DeckPanel = new JPanel();
-        this.DeckPanel.setBounds(960, 505, 100, 70);
+        this.DeckPanel.setBounds(Math.floorDiv(8*width, 9), Math.floorDiv(101*height, 144), Math.floorDiv(5*width, 54), Math.floorDiv(7*height, 72));
         this.DeckPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         this.DeckPanel.setLayout(new BorderLayout());
 
         this.DeckLabel = new JLabel("<html>Deck<br><center>" + "40" + "/40</center></html>");
-        this.DeckLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        this.DeckLabel.setFont(new Font("Arial", Font.BOLD, Math.floorDiv(20*width,1080)));
         this.DeckLabel.setHorizontalAlignment(SwingConstants.CENTER);
         this.DeckPanel.add(this.DeckLabel);
 
         // Mana
         this.ManaPanel = new JPanel();
-        this.ManaPanel.setBounds(960, 585, 100, 70);
+        this.ManaPanel.setBounds(Math.floorDiv(8*width, 9), Math.floorDiv(13*height, 16), Math.floorDiv(5*width, 54), Math.floorDiv(7*height, 72));
         this.ManaPanel.setLayout(new BorderLayout());
 
         this.ManaButton = new JButton("<html>Mana<br><center>" + Math.min(this.turn, 10) + "/" + Math.min(this.turn, 10)
                 + "</center></html>");
-        this.ManaButton.setFont(new Font("Arial", Font.BOLD, 20));
+        this.ManaButton.setFont(new Font("Arial", Font.BOLD, Math.floorDiv(20*width,1080)));
         this.ManaButton.setHorizontalAlignment(SwingConstants.CENTER);
          this.ManaButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         this.ManaButton.setForeground(Color.WHITE);
@@ -474,13 +480,13 @@ public class GUI {
     }
 
     private void createCardinBoard(JPanel panel, JButton button, int x, int y, String name) {
-        panel.setBounds(x, y, 120, 120);
+        panel.setBounds(x, y, Math.floorDiv(width, 9), Math.floorDiv(height, 6));
         panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         panel.setLayout(new BorderLayout());
         button.setText(name);
         button.setVerticalTextPosition(JButton.BOTTOM);
         button.setHorizontalTextPosition(JButton.CENTER);
-        button.setFont(new Font("Arial", Font.PLAIN, 10));
+        button.setFont(new Font("Arial", Font.PLAIN, Math.floorDiv(10*width,1080)));
         button.setFocusPainted(false);
         button.addActionListener(commandHandler);
         if (!name.equals("A0") && !name.equals("B0")) {
@@ -490,7 +496,7 @@ public class GUI {
     }
 
     private void createPhase(JLabel label) {
-        label.setFont(new Font("Arial", Font.BOLD, 20));
+        label.setFont(new Font("Arial", Font.BOLD, Math.floorDiv(20*width,1080)));
         label.setHorizontalAlignment(SwingConstants.CENTER);
         label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         label.setBackground(Color.WHITE);
@@ -504,7 +510,7 @@ public class GUI {
         button.setText(name);
         button.setVerticalTextPosition(JButton.BOTTOM);
         button.setHorizontalTextPosition(JButton.CENTER);
-        button.setFont(new Font("Arial", Font.PLAIN, 16));
+        button.setFont(new Font("Arial", Font.PLAIN, Math.floorDiv(16*width,1080)));
         button.setFocusPainted(false);
         button.addActionListener(commandHandler);
         button.addMouseListener(new HoverHandler(name));
@@ -512,13 +518,13 @@ public class GUI {
     }
 
     private void createDrawChoice(JPanel panel, JButton button, int x, int y, String name) {
-        panel.setBounds(x, y, 150, 300);
+        panel.setBounds(x, y, Math.floorDiv(5*width, 36), Math.floorDiv(5*height, 12));
         panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         panel.setLayout(new BorderLayout());
         button.setText(name);
         button.setVerticalTextPosition(JButton.BOTTOM);
         button.setHorizontalTextPosition(JButton.CENTER);
-        button.setFont(new Font("Arial", Font.PLAIN, 20));
+        button.setFont(new Font("Arial", Font.PLAIN, Math.floorDiv(12*width,1080)));
         button.setFocusPainted(false);
         button.addActionListener(commandHandler);
         button.setActionCommand(name);
@@ -551,7 +557,7 @@ public class GUI {
             if (card != null) {
                 this.HandCard[i].setText("<html>"+card.getName()+"<br>Mana: " + card.getMana());
                 this.HandCard[i]
-                        .setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + card.getImagePath()), 100, 100));
+                        .setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + card.getImagePath()), Math.floorDiv(100*width,1080), Math.floorDiv(100*height,720)));
                 this.HandCard[i].setVisible(true);
                 this.HandCard[i].setEnabled(true);
             } else {
@@ -568,7 +574,7 @@ public class GUI {
             SummonedCharacter p2Card = p2.getBoard().getSummonedCharacter(i-1);
             if(p1Card!=null){
                 this.P1Card[i].setText("<html>"+p1Card.getCharacter().getName()+"<br>Hp: "+p1Card.getTotalHealth()+"<br>Att: " + p1Card.getTotalAttack() + "<br>"+p1Card.getExp()+"/"+p1Card.getNextLevelExp()+" ["+p1Card.getLevel()+"]</html>");
-                this.P1Card[i].setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + p1Card.getCharacter().getImagePath()), 40, 40));
+                this.P1Card[i].setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + p1Card.getCharacter().getImagePath()), Math.floorDiv(40*width,1080), Math.floorDiv(40*height,720)));
             }
             else{
                 this.P1Card[i].setText(null);
@@ -576,7 +582,7 @@ public class GUI {
             }
             if(p2Card!=null){
                 this.P2Card[i].setText("<html>"+p2Card.getCharacter().getName()+"<br>Hp: "+p2Card.getTotalHealth()+"<br>Att: " + p2Card.getTotalAttack() + "<br>"+p2Card.getExp()+"/"+p2Card.getNextLevelExp()+" ["+p2Card.getLevel()+"]</html>");
-                this.P2Card[i].setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + p2Card.getCharacter().getImagePath()), 40, 40));
+                this.P2Card[i].setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + p2Card.getCharacter().getImagePath()), Math.floorDiv(40*width,1080), Math.floorDiv(40*height,720)));
             }
             else{
                 this.P2Card[i].setText(null);
@@ -701,6 +707,7 @@ public class GUI {
     }
 
     public void showDrawPhase() {
+        disableHand();
         this.DrawPhaseLabel.setBackground(Color.decode("#1D63DC"));
         this.DrawPhaseLabel.setForeground(Color.WHITE);
         this.EndPhaseLabel.setBackground(Color.WHITE);
@@ -779,8 +786,8 @@ public class GUI {
         }
         for (int i = 0; i < 3;i++) {
             Card card = choice.get(i);
-            this.DrawCard[i+1].setText(card.getName()+"\n"+card.getType());
-            this.DrawCard[i+1].setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + card.getImagePath()), 100, 100));
+            this.DrawCard[i+1].setText("<html>"+card.getName()+"<br>"+card.getType()+"<br>Mana: "+card.getMana()+"</html>");
+            this.DrawCard[i+1].setIcon(scaleImage(new ImageIcon(Define.IMG_PATH + card.getImagePath()), Math.floorDiv(100*width,1080), Math.floorDiv(100*height,720)));
             this.DrawCard[i+1].setEnabled(true);
         }
     }
@@ -896,7 +903,7 @@ public class GUI {
                         updateBoard();
                         updateHand();
                     }
-                    else{
+                    else if(this.command1.charAt(0)=='A' || this.command1.charAt(0)=='B'){
                         if(player.attack(enemy, this.command1 + " + " + this.command2)){
                             updateBoard();
                             updatePlayerStatus();
@@ -1055,7 +1062,7 @@ public class GUI {
                 this.HoverTextArea.setText(card.getName() + "\n\nType: "
                         + card.getType() + "\nMana: "+ card.getMana() +"\n\n" +card.getDesc());
                 this.HoverImageLabel.setIcon(scaleImage(
-                        new ImageIcon(Define.IMG_PATH + player.getHand().getCard(i).getImagePath()), 200, 200));
+                        new ImageIcon(Define.IMG_PATH + player.getHand().getCard(i).getImagePath()), Math.floorDiv(200*width,1080), Math.floorDiv(200*height,720)));
             }
         }
         if (path.charAt(0) == 'A') {
@@ -1064,7 +1071,7 @@ public class GUI {
                 if (i > 0) {
                     this.HoverTextArea.setText(card.getCharacter().getName()+"\n\nHealth: "+card.getTotalHealth()+"\nAttack: "+card.getTotalAttack()+"\nexp[lvl]: "+card.getExp()+"/"+card.getNextLevelExp()+" ["+card.getLevel()+"]\n\n"+card.getCharacter().getDesc());
                     this.HoverImageLabel.setIcon(scaleImage(
-                            new ImageIcon(Define.IMG_PATH + card.getCharacter().getImagePath()), 200, 200));
+                            new ImageIcon(Define.IMG_PATH + card.getCharacter().getImagePath()), Math.floorDiv(200*width,1080), Math.floorDiv(200*height,720)));
                 }
             }
         }
@@ -1074,7 +1081,7 @@ public class GUI {
                 if (i > 0) {
                     this.HoverTextArea.setText(card.getCharacter().getName()+"\n\nHealth: "+card.getTotalHealth()+"\nAttack: "+card.getTotalAttack()+"\nexp[lvl]: "+card.getExp()+"/"+card.getNextLevelExp()+" ["+card.getLevel()+"]\n\n"+card.getCharacter().getDesc());
                     this.HoverImageLabel.setIcon(scaleImage(
-                            new ImageIcon(Define.IMG_PATH + card.getCharacter().getImagePath()), 200, 200));
+                            new ImageIcon(Define.IMG_PATH + card.getCharacter().getImagePath()), Math.floorDiv(200*width,1080), Math.floorDiv(200*height,720)));
                 }
             }
         }
