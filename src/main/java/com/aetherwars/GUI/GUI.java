@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 import java.lang.Math;
 
-public class GUI {
+public class GUI extends Thread{
     // Main Frame
     Player p1, p2;
     int P1InitialDeckSize, P2InitialDeckSize;
@@ -118,6 +118,7 @@ public class GUI {
         this.HealthBarPanel1.add(this.HealthBar1);
 
         this.p1Name = new JLabel("Lumine (Aether's Sister)");
+        this.p1Name.setFont(new Font("Arial", Font.BOLD, Math.floorDiv(16*width,1080)));
         this.HealthBarPanel1.add(this.p1Name);
 
         // board
@@ -172,9 +173,9 @@ public class GUI {
         this.HealthBar2.setPreferredSize(new Dimension(Math.floorDiv(10*width, 27), Math.floorDiv(height, 18)));
         this.HealthBar2.setForeground(Color.GREEN);
         this.HealthBar2.setValue(80);
-        this.HealthBarPanel2.add(this.HealthBar2);
-
+        this.HealthBarPanel2.add(this.HealthBar2); 
         this.p2Name = new JLabel("Ayaka (Aether's Future Wife)");
+        this.p2Name.setFont(new Font("Arial", Font.BOLD, Math.floorDiv(16*width,1080)));
         this.HealthBarPanel2.add(this.p2Name);
 
         // board
@@ -662,6 +663,7 @@ public class GUI {
                 this.p1.startTurn(this.turn);
                 this.current_mana = this.p1.getMana();
                 updateHand();
+                updateBoard();
                 showDrawPhase();
                 showDrawChoice();
                 break;
@@ -680,6 +682,7 @@ public class GUI {
                 this.p2.startTurn(this.turn);
                 this.current_mana = this.p2.getMana();
                 updateHand();
+                updateBoard();
                 showDrawPhase();
                 showDrawChoice();
                 break;
@@ -893,13 +896,27 @@ public class GUI {
                         }
                 }else{
                     System.out.println(this.command1 + " + " + this.command2);
-                    if(this.command1.charAt(0)=='D'){
+                    if(command2.equals("TC")){
+                        if ((command1.charAt(0) == 'B' && current_player == 2 ) || (command1.charAt(0) == 'A' && current_player == 1 ))
+                        {
+                            player.throwCardOnBoard(this.command1 + " + " + this.command2);
+                            updateBoard();
+                        }
+                        else if (command1.charAt(0) == 'H')
+                        {
+                            player.throwCardOnHand(this.command1 + " + " + this.command2);
+                            updateHand();
+                        }
+                        
+
+                    }
+                    else if(this.command1.charAt(0)=='D'){
                         player.replaceHandFromDraw(this.command1 +" + "+ this.command2);
                         NoticePanel.setVisible(false);
                         nextPhase();
                     }
                     else if(this.command1.charAt(0)=='H'){
-                        player.handToBoard(this.command1 + " + " + this.command2);
+                        player.handToBoard(enemy, this.command1 + " + " + this.command2);
                         updateBoard();
                         updateHand();
                     }
@@ -1057,10 +1074,9 @@ public class GUI {
         }
         int i = path.charAt(1) - 49;
         if (path.charAt(0) == 'H') {
-            Card card = player .getHand().getCard(i);
+            Card card = player.getHand().getCard(i);
             if (card != null) {
-                this.HoverTextArea.setText(card.getName() + "\n\nType: "
-                        + card.getType() + "\nMana: "+ card.getMana() +"\n\n" +card.getDesc());
+                this.HoverTextArea.setText(card.getDescription());
                 this.HoverImageLabel.setIcon(scaleImage(
                         new ImageIcon(Define.IMG_PATH + player.getHand().getCard(i).getImagePath()), Math.floorDiv(200*width,1080), Math.floorDiv(200*height,720)));
             }

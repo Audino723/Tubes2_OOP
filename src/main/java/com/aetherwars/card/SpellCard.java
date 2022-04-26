@@ -11,7 +11,7 @@ public abstract class SpellCard extends Card {
     public SpellCard(String name, String desc, Type type, String image, int mana, int duration) {
         super(name, desc, type, image, mana);
         this.duration = duration;
-        
+        this.status = Status.FIRSTROUND;
     }
     
     public int getDuration() {
@@ -47,26 +47,25 @@ public abstract class SpellCard extends Card {
         // Called every turns
         // On first round, no need to decrease duration, just change status to SECONDROUND
         if (this.status == Status.FIRSTROUND) {
-            this.status = Status.SECONDROUND;
-        }
-        else {
-            // On second round after spell is casted, it is set to active
-            if (this.status == Status.SECONDROUND && this.duration == 0) {
+            if(this.duration == 0){
                 this.status = Status.PERM;
             }
-            else if (this.status == Status.SECONDROUND && this.duration > 0) {
+            else{
                 this.status = Status.TEMP;
-            }
-            // Start counting down duration
-            if (this.status == Status.TEMP && this.duration > 0) {
                 this.duration--;
-                if (this.duration == 0) {
-                    this.status = Status.INACTIVE;
-                }
             }
-            // If the effect is permanent, no need to reduce duration nor set to INACTIVE
+            
+            System.out.println("FIRSTROUND jadi pindah SECONDROUND");
+        }
+        else if (this.status == Status.TEMP) {
+            // On second round after spell is casted, it is set to active
+            this.duration--;
+            if(this.duration ==0){
+                this.status = Status.INACTIVE;
+            }
         }
         
+        System.out.println("DURATION " + this.duration);
         return this.status;
     }
 

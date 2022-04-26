@@ -21,10 +21,20 @@ public class SwapSpellCard extends SpellCard {
         super.show();
     }
 
+    @Override
+    public String getDescription() {
+        String text;
+        text = this.getName();
+        text += "\n\nTipe       : " + this.getType();
+        text += "\nMana     : " + this.getMana();
+        text += "\nDuration : " + this.getDuration();
+        text += "\n\n"+this.getDesc();
+        return text;
+    }
+
     public static class SwapBuilder{
         private String name;
         private String desc;
-        private Type type;
         private String imagepath;
         private int mana;
         private int duration;
@@ -35,10 +45,6 @@ public class SwapSpellCard extends SpellCard {
 
         public SwapBuilder setCardDescription(String desc) {
             this.desc = desc;return this;
-        }
-
-        public SwapBuilder setCardType(Type type) {
-            this.type = type;return this;
         }
 
         public SwapBuilder setCardImagePath(String imagepath) {

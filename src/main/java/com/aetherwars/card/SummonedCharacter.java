@@ -14,6 +14,9 @@ public class SummonedCharacter {
     private CharacterCard character;
     private int swapDurationLeft;
     private int immuneLeft;
+    private int manaChar;
+    private int hpChar;
+    private int atkChar;
 
     // Constructor
     public SummonedCharacter(CharacterCard character, int level, int exp) {
@@ -24,6 +27,9 @@ public class SummonedCharacter {
         this.totalHealth = character.getBaseHp() + (level - 1) * character.getHealthUp();
         this.activePotions = new ArrayList<>();
         this.immuneLeft = 0;
+        this.manaChar = character.getMana();
+        this.hpChar = character.getBaseHp();
+        this.atkChar = character.getBaseAtk();
     }
 
     // Getters and Setters
@@ -139,7 +145,7 @@ public class SummonedCharacter {
         this.totalHealth -= damage;
         if (this.totalHealth <= 0) {
             // character dies
-            this.character.setHp(0);
+            this.totalHealth = 0;
         } else {
             // damage sufficient, only taking from potions' hp and health itselves
             // Top = back
@@ -161,8 +167,12 @@ public class SummonedCharacter {
         // To attack, just call attack(), no need calling takeAttack()
         this.exp += other.takeAttack(this);
         other.setExp(other.getExp() + this.takeAttack(other));
-        this.levelUp();
-        other.levelUp();
+        if(!this.isDead()) {
+            this.levelUp();
+        }
+        if(!other.isDead()) {
+            other.levelUp();
+        }
     }
 
     public void updatePotionsTime() {
@@ -172,15 +182,34 @@ public class SummonedCharacter {
             return;
         } else {
             // Apply spells effect for specific duration (TEMP) or permanenty (PERM)
-            int i = 0;
-            while (this.activePotions.size() > 0 && i < this.activePotions.size()) {
-                Status temp = this.activePotions.get(i).decreaseDuration();
+            ArrayList<PotionSpellCard> toRemove = new ArrayList<PotionSpellCard>();
+            
+            for (PotionSpellCard potion : this.activePotions) {
+                Status temp = potion.decreaseDuration();
+                System.out.println("STATUS " + temp);
                 if (temp == Status.INACTIVE) {
-                    this.activePotions.remove(i);
-                } else {
-                    i++;
+                    toRemove.add(potion);
+                    // this.activePotions.remove(potion);
+                    // this.countTotalHealth();
+                    // this.countTotalAttack();
                 }
             }
+            this.activePotions.removeAll(toRemove);
+            this.countTotalHealth();
+            this.countTotalAttack();
+
+            // int i = 0;
+            // while (this.activePotions.size() > 0 && i < this.activePotions.size()) {
+            //     Status temp = this.activePotions.get(i).decreaseDuration();
+            //     if (temp == Status.INACTIVE) {
+            //         ArrayList<Object> ret = this.activePotions.get(i).giveEffect();
+            //         this.totalHealth -= (Integer) ret.get(0);
+            //         this.totalAttack -= (Integer) ret.get(1);
+            //         this.activePotions.remove(i);
+            //     } else {
+            //         i++;
+            //     }
+            // }
         }
     }
 
@@ -193,11 +222,10 @@ public class SummonedCharacter {
                 PotionSpellCard sNew = (PotionSpellCard) s;
                 this.addActivePotions(sNew);
                 ret = sNew.giveEffect();
-                this.totalAttack += (Integer) ret.get(0);
-                this.totalHealth += (Integer) ret.get(1);
+                this.totalHealth += (Integer) ret.get(0);
+                this.totalAttack += (Integer) ret.get(1);
             }
             if (this.isDead()) {
-                this.character.setHp(0);
                 this.activePotions.clear();
                 System.out.println("Character dead");
                 return;
@@ -205,32 +233,24 @@ public class SummonedCharacter {
         } else if (s.getType() == Type.LVL) {
             ret = s.giveEffect();
             int tempLevel = this.level;
-            int tempMana = this.character.getMana() - (int) Math.ceil(tempLevel / 2);
+            int tempMana = this.manaChar - (int) Math.ceil(tempLevel / 2);
             tempLevel += (Integer) ret.get(0);
             if (tempLevel >= 1 && tempLevel <= 10 && tempMana >= 0) {
                 this.level = tempLevel;
-                this.character.setMana(tempMana);
+                this.manaChar = tempMana;
                 this.exp = (Integer) ret.get(1);
             } else {
                 System.out.println("Level out of range");
             }
             // If level = 1 and leveldown, level stays 1
-            // NO NEED this block of code
-            // if (this.isDead()) {
-            // this.character.setHp(0);
-            // this.activePotions.clear();
-            // System.out.println("Character dead");
-            // return;
-            // }
         } else if (s.getType() == Type.SWAP) {
             if (swapDurationLeft == 0) {
-                int temp = this.character.getBaseAtk();
-                this.character.setAtk(this.character.getBaseHp());
-                this.character.setHp(temp);
+                int temp = this.atkChar;
+                this.atkChar = this.hpChar;
+                this.hpChar = temp;
                 this.countTotalAttack();
                 this.countTotalHealth();
                 if (this.isDead()) {
-                    this.character.setHp(0);
                     this.activePotions.clear();
                     System.out.println("Character dead");
                     return;
@@ -245,7 +265,7 @@ public class SummonedCharacter {
             int tempMana = (int) Math.ceil(this.level / 2);
             if (this.immuneLeft >= 0) {
                 this.immuneLeft += (Integer) ret.get(0);
-                this.character.setMana(tempMana);
+                this.manaChar = tempMana;
             }
         }
     }

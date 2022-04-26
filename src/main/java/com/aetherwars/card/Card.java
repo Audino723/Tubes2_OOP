@@ -3,11 +3,11 @@ package com.aetherwars.card;
 import com.aetherwars.util.Type;
 
 public abstract class Card {
-    private String name;
-    private String desc;
-    private Type type;
-    private String imagepath;
-    private int mana;
+    private final String name;
+    private final String desc;
+    private final Type type;
+    private final String imagepath;
+    private final int mana;
 
     // Constructor
     public Card(String name, String desc, Type type, String imagepath, int mana) {
@@ -35,22 +35,7 @@ public abstract class Card {
         return this.mana;
     }
 
-    // Setter
-    public void setName(String name) {
-        this.name = name;
-    }
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-    public void setType(Type type) {
-        this.type = type;
-    }
-    public void setImagePath(String imagepath) {
-        this.imagepath = imagepath;
-    }
-    public void setMana(int mana) {
-        this.mana = mana;
-    }
+    public abstract String getDescription();
 
     // Show card
     public abstract void show(); // buat dipanggil oleh card container

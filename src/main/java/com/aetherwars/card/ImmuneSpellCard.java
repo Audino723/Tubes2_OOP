@@ -1,3 +1,8 @@
+package com.aetherwars.card;
+
+import java.util.ArrayList;
+import com.aetherwars.util.Type;
+
 public class ImmuneSpellCard extends SpellCard {
     public ImmuneSpellCard(ImmuneBuilder builder) {
         super(builder.name, builder.desc, Type.IMMUNE, builder.imagepath, builder.mana, builder.duration);
@@ -10,10 +15,20 @@ public class ImmuneSpellCard extends SpellCard {
 
     public ArrayList<Object> giveEffect() {
         ArrayList<Object> effect = new ArrayList<Object>();
-        if (this.isImmune) {
-            effect.add(-1);
-        }
+        effect.add(-1);
         return effect;
+    }
+
+    @Override
+    public String getDescription() {
+        // TODO Auto-generated method stub
+        String text;
+        text = this.getName();
+        text += "\n\nTipe       : " + this.getType();
+        text += "\nMana     : " + this.getMana();
+        text += "\nDuration : " + this.getDuration();
+        text += "\n\n"+this.getDesc();
+        return text;
     }
 
     public static class ImmuneBuilder {
@@ -21,6 +36,7 @@ public class ImmuneSpellCard extends SpellCard {
         private String desc;
         private String imagepath;
         private int mana;
+        private int duration;
 
         public ImmuneBuilder setCardName(String name) {
             this.name = name;return this;
@@ -28,6 +44,10 @@ public class ImmuneSpellCard extends SpellCard {
     
         public ImmuneBuilder setCardDescription(String desc) {
             this.desc = desc;return this;
+        }
+
+        public ImmuneBuilder setCardDuration(int duration) {
+            this.duration = duration;return this;
         }
     
         public ImmuneBuilder setCardImagePath(String imagepath) {

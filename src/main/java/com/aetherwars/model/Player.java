@@ -5,12 +5,9 @@ import com.aetherwars.card.CharacterCard;
 import com.aetherwars.card.SummonedCharacter;
 import com.aetherwars.card.SpellCard;
 import com.aetherwars.util.CommandType;
-import com.aetherwars.util.Type;
 
-import org.junit.AfterClass;
-
-import static org.junit.Assert.fail;
-
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.*;
 
 public class Player {
@@ -29,6 +26,15 @@ public class Player {
         this.board = new Board();
         this.hand = new Hand();
         this.deck = new Deck(cdict);
+    }
+
+    public Player(String name, HashMap<String, Card> cdict, int player) throws IOException, URISyntaxException {
+        this.name = name;
+        this.hp = 80;
+        this.mana = 0;
+        this.board = new Board();
+        this.hand = new Hand();
+        this.deck = new Deck(cdict,player);
     }
 
     public String getName()
@@ -221,12 +227,52 @@ public class Player {
         return '0';
     }
 
-    public void handToBoard(String command) {
+    public void throwCardOnHand(String command){
+        Integer[] indexes = this.playerCommandHandler(CommandType.THROW_FROM_HAND, command);
+
+        int choosenIndex = indexes[0];
+
+        if (choosenIndex == -1)
+        {
+            System.out.println("gagal throw card");
+            return;
+        }
+
+        try {
+            // contoh command : "H1 + TH"
+            this.hand.take(choosenIndex);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void throwCardOnBoard(String command){
+        Integer[] indexes = this.playerCommandHandler(CommandType.THROW_FROM_BOARD, command);
+
+        int choosenIndex = indexes[0];
+
+        if (choosenIndex <= 0)
+        {
+            System.out.println("gagal throw card");
+            return;
+        }
+
+        try {
+            // contoh command : "B1 + TH"
+            this.board.take(choosenIndex-1);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void handToBoard(Player p2, String command) {
         /*  Mengambil kartu dari hand dan meletakkan ke board*/
 
         Integer[] indexes = this.playerCommandHandler(CommandType.DRAW_FROM_HAND_TO_BOARD, command);
 
-        if (indexes[0] == -1)
+        if (indexes[0]  <= 0)
         {            
             System.out.println("Gagal mensummmon character");
             return;
@@ -256,7 +302,11 @@ public class Player {
             else
             {
                 SpellCard spellCard = (SpellCard) c;
-                this.board.getSummonedCharacter(placingIndex).takeSpell(spellCard);                
+                this.board.getSummonedCharacter(placingIndex).takeSpell(spellCard); 
+
+                // Menggunakan spell offensive
+                this.updateBoard();
+                p2.updateBoard();               
             }
         }
         catch (Exception e)
@@ -361,6 +411,32 @@ public class Player {
                 if (command.charAt(0) == 'D' && command.charAt(5) == 'H') {
                     indexes[0] = (int) command.charAt(1) - 49;
                     indexes[1] = (int) command.charAt(6) - 49;
+                }
+                else
+                {
+                    indexes[0] = -1;
+                    indexes[1] = -1;
+                }
+                break;
+            case THROW_FROM_BOARD:
+                if  (command.substring(0,1).matches("B") && 
+                    command.substring(5,7).matches("TC")) 
+                {
+                    indexes[0] = (int) command.charAt(1) - 49;
+                    indexes[1] = -1;
+                }
+                else
+                {
+                    indexes[0] = -1;
+                    indexes[1] = -1;
+                }
+                break;
+            case THROW_FROM_HAND:
+                if  (command.substring(0,1).matches("H") && 
+                    command.substring(5,7).matches("TC")) 
+                {
+                    indexes[0] = (int) command.charAt(1) - 49;
+                    indexes[1] = -1;
                 }
                 else
                 {

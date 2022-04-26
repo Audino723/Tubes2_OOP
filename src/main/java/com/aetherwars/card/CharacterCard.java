@@ -3,10 +3,10 @@ package com.aetherwars.card;
 import com.aetherwars.util.Type;
 
 public class CharacterCard extends Card {
-    private int baseAtk; // base
-    private int baseHp;
-    private int attackUp; // up
-    private int healthUp;
+    private final int baseAtk; // base
+    private final int baseHp;
+    private final int attackUp; // up
+    private final int healthUp;
 
     // Constructor
     public CharacterCard(CharacterBuilder builder) {
@@ -31,18 +31,17 @@ public class CharacterCard extends Card {
         return this.healthUp;
     }
 
-    // Setter
-    protected void setAtk(int baseAtk) {
-        this.baseAtk = baseAtk;
-    }
-    protected void setHp(int baseHp) {
-        this.baseHp = baseHp;
-    }
-    protected void setAttackUp(int attackUp) {
-        this.attackUp = attackUp;
-    }
-    protected void setHealthUp(int healthUp) {
-        this.healthUp = healthUp;
+    @Override
+    public String getDescription() {
+        // TODO Auto-generated method stub
+        String text;
+        text = this.getName();
+        text += "\n\nTipe    : " + this.getType();
+        text += "\nMana  : " + this.getMana();
+        text += "\nHp      : " + this.getBaseHp();
+        text += "\nAttack : " + this.getBaseAtk();
+        text += "\n\n"+this.getDesc();
+        return text;
     }
 
     // Show

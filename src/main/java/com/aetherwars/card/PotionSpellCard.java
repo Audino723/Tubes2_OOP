@@ -42,6 +42,20 @@ public class PotionSpellCard extends SpellCard {
         return effect;
     }
 
+    @Override
+    public String getDescription() {
+        // TODO Auto-generated method stub
+        String text;
+        text = this.getName();
+        text += "\n\nTipe    : " + this.getType();
+        text += "\nMana  : " + this.getMana();
+        text += "\nHp      : " + this.getHP();
+        text += "\nAttack : " + this.getAttack();
+        text += "\nDuration : " + this.getDuration();
+        text += "\n\n"+this.getDesc();
+        return text;
+    }
+
     public static class PotionBuilder {
         private String name;
         private String desc;

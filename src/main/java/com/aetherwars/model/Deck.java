@@ -3,7 +3,10 @@ package com.aetherwars.model;
 import com.aetherwars.card.Card;
 import com.aetherwars.exceptions.EmptyContainerException;
 import com.aetherwars.exceptions.FullContainerException;
+import com.aetherwars.util.ImportDeck;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.*;
 
 public class Deck implements CardContainer {
@@ -21,6 +24,10 @@ public class Deck implements CardContainer {
             int k = rand.nextInt(n - 1);
             this.cards.push(cdict.get(generator.get(k)));
         }
+    }
+
+    Deck(HashMap<String, Card> cdict, int player) throws IOException, URISyntaxException{
+        this.cards = ImportDeck.read(cdict, player);
     }
 
     public int getNeff() {

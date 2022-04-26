@@ -24,6 +24,18 @@ public class MorphSpellCard extends SpellCard {
     public CharacterCard getChar(){
         return this.charToChange;
     }
+
+    @Override
+    public String getDescription() {
+        // TODO Auto-generated method stub
+        String text;
+        text = this.getName();
+        text += "\n\nTipe      : " + this.getType();
+        text += "\nMana    : " + this.getMana();
+        text += "\nCharacter To Change : " + this.charToChange.getName();
+        text += "\n\n"+this.getDesc();
+        return text;
+    }
     
 
 

@@ -32,6 +32,17 @@ public class LevelSpellCard extends SpellCard {
         }
         return effect;
     }
+    @Override
+    public String getDescription() {
+        // TODO Auto-generated method stub
+        String text;
+        text = this.getName();
+        text += "\n\nTipe        : " + this.getType();
+        text += "\nMana      : " + this.getMana();
+        text += "\nLevel Up : " + this.isLevelIncrease();
+        text += "\n\n"+this.getDesc();
+        return text;
+    }
 
     public static class LevelSpellBuilder {
         private boolean increaseLevel;
