@@ -23,7 +23,6 @@ public class ImmuneSpellCard extends SpellCard {
 
     @Override
     public String getDescription() {
-        // TODO Auto-generated method stub
         String text;
         text = this.getName();
         text += "\n\nTipe       : " + this.getType();
@@ -33,7 +32,7 @@ public class ImmuneSpellCard extends SpellCard {
         return text;
     }
 
-    public static class ImmuneBuilder {
+    public static class ImmuneBuilder implements ICardBuilder<ImmuneBuilder> {
         private String name;
         private String desc;
         private String imagepath;
@@ -47,10 +46,6 @@ public class ImmuneSpellCard extends SpellCard {
         public ImmuneBuilder setCardDescription(String desc) {
             this.desc = desc;return this;
         }
-
-        public ImmuneBuilder setCardImmunity(int immunity) {
-            this.immunity = immunity;return this;
-        }
     
         public ImmuneBuilder setCardImagePath(String imagepath) {
             this.imagepath = imagepath; return this;
@@ -60,6 +55,11 @@ public class ImmuneSpellCard extends SpellCard {
             this.mana = mana; return this;
         }
 
+        public ImmuneBuilder setCardImmunity(int immunity) {
+            this.immunity = immunity;return this;
+        }
+
+        @SuppressWarnings("unchecked")
         public ImmuneSpellCard getResult() {
             return new ImmuneSpellCard(this);
         }

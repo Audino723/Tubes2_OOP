@@ -45,7 +45,7 @@ public class MorphSpellCard extends SpellCard {
         System.out.println("Target: " + this.charToChange.getName());
     }
 
-    public static class MorphBuilder {
+    public static class MorphBuilder implements ICardBuilder<MorphBuilder>{
         private String name;
         private String desc;
         private String imagepath;
@@ -72,6 +72,7 @@ public class MorphSpellCard extends SpellCard {
             this.charToChange = charToChange; return this;
         }
     
+        @SuppressWarnings("unchecked")
         public MorphSpellCard getResult() {
             return new MorphSpellCard(this);
         }

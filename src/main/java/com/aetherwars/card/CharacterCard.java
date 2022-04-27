@@ -33,7 +33,6 @@ public class CharacterCard extends Card {
 
     @Override
     public String getDescription() {
-        // TODO Auto-generated method stub
         String text;
         text = this.getName();
         text += "\n\nTipe    : " + this.getType();
@@ -55,7 +54,7 @@ public class CharacterCard extends Card {
         System.out.println("Hp: " + this.getBaseHp());
     }
 
-    public static class CharacterBuilder{
+    public static class CharacterBuilder implements ICardBuilder<CharacterBuilder>, ITypeBuilder<CharacterBuilder>, IStatsBuilder<CharacterBuilder>{
         private String name;
         private String desc;
         private Type type;
@@ -75,16 +74,16 @@ public class CharacterCard extends Card {
             this.desc = desc; return this;
         }
 
-        public CharacterBuilder setCardType(Type type) {
-            this.type = type; return this;
-        }
-
         public CharacterBuilder setCardImagePath(String imagepath) {
             this.imagepath = imagepath; return this;
         }
 
         public CharacterBuilder setCardMana(int mana) {
             this.mana = mana; return this;
+        }
+
+        public CharacterBuilder setCardType(Type type) {
+            this.type = type; return this;
         }
 
         public CharacterBuilder setCardAtk(int atk) {
@@ -103,6 +102,7 @@ public class CharacterCard extends Card {
             this.healthUp = hpUp; return this;
         }
 
+        @SuppressWarnings("unchecked")
         public CharacterCard getResult() {
             return new CharacterCard(this);
         }

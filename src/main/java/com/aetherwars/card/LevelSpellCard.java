@@ -3,7 +3,7 @@ package com.aetherwars.card;
 import com.aetherwars.util.Type;
 import java.util.ArrayList;
 
-public class LevelSpellCard extends SpellCard {
+public class LevelSpellCard extends SpellCard  {
     public boolean increaseLevel; // True to increase, False for decrease
 
     public LevelSpellCard(LevelSpellBuilder builder) {
@@ -34,7 +34,6 @@ public class LevelSpellCard extends SpellCard {
     }
     @Override
     public String getDescription() {
-        // TODO Auto-generated method stub
         String text;
         text = this.getName();
         text += "\n\nTipe        : " + this.getType();
@@ -44,7 +43,7 @@ public class LevelSpellCard extends SpellCard {
         return text;
     }
 
-    public static class LevelSpellBuilder {
+    public static class LevelSpellBuilder implements ICardBuilder<LevelSpellBuilder>{
         private boolean increaseLevel;
         private String name;
         private String desc;
@@ -71,7 +70,7 @@ public class LevelSpellCard extends SpellCard {
             this.increaseLevel = increaseLevel; return this;
         }
 
-
+        @SuppressWarnings("unchecked")
         public LevelSpellCard getResult() {
             return new LevelSpellCard(this);
         }

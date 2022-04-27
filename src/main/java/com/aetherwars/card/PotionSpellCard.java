@@ -44,7 +44,6 @@ public class PotionSpellCard extends SpellCard {
 
     @Override
     public String getDescription() {
-        // TODO Auto-generated method stub
         String text;
         text = this.getName();
         text += "\n\nTipe    : " + this.getType();
@@ -56,7 +55,7 @@ public class PotionSpellCard extends SpellCard {
         return text;
     }
 
-    public static class PotionBuilder {
+    public static class PotionBuilder implements ICardBuilder<PotionBuilder>, IStatsBuilder<PotionBuilder> {
         private String name;
         private String desc;
         private String imagepath;
@@ -93,6 +92,7 @@ public class PotionSpellCard extends SpellCard {
             this.duration = duration;return this;
         }
 
+        @SuppressWarnings("unchecked")
         public PotionSpellCard getResult() {
             return new PotionSpellCard(this);
         }

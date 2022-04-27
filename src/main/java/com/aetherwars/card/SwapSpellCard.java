@@ -32,7 +32,7 @@ public class SwapSpellCard extends SpellCard {
         return text;
     }
 
-    public static class SwapBuilder{
+    public static class SwapBuilder implements ICardBuilder<SwapBuilder>{
         private String name;
         private String desc;
         private String imagepath;
@@ -59,6 +59,7 @@ public class SwapSpellCard extends SpellCard {
             this.duration = duration;return this;
         }
 
+        @SuppressWarnings("unchecked")
         public SwapSpellCard getResult() {
             return new SwapSpellCard(this);
         }

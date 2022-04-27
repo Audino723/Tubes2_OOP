@@ -233,11 +233,11 @@ public class SummonedCharacter {
         } else if (s.getType() == Type.LVL) {
             ret = s.giveEffect();
             int tempLevel = this.level;
-            int tempMana = this.manaChar - (int) Math.ceil(tempLevel / 2);
+            //int tempMana = this.manaChar - (int) Math.ceil(tempLevel / 2);
             tempLevel += (Integer) ret.get(0);
-            if (tempLevel >= 1 && tempLevel <= 10 && tempMana >= 0) {
+            if (tempLevel >= 1 && tempLevel <= 10) {
                 this.level = tempLevel;
-                this.manaChar = tempMana;
+                this.manaChar = this.manaChar - (int) Math.ceil(tempLevel / 2);
                 this.exp = (Integer) ret.get(1);
                 this.countTotalAttack();
                 this.countTotalHealth();
