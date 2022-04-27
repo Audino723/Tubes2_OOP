@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import com.aetherwars.util.Type;
 
 public class ImmuneSpellCard extends SpellCard {
+    int immunity;
     public ImmuneSpellCard(ImmuneBuilder builder) {
-        super(builder.name, builder.desc, Type.IMMUNE, builder.imagepath, builder.mana, builder.duration);
+        super(builder.name, builder.desc, Type.IMMUNE, builder.imagepath, builder.mana, 0);
     }
 
     public void show() {
@@ -15,7 +16,7 @@ public class ImmuneSpellCard extends SpellCard {
 
     public ArrayList<Object> giveEffect() {
         ArrayList<Object> effect = new ArrayList<Object>();
-        effect.add(-1);
+        effect.add(this.immunity);
         return effect;
     }
 
@@ -36,7 +37,7 @@ public class ImmuneSpellCard extends SpellCard {
         private String desc;
         private String imagepath;
         private int mana;
-        private int duration;
+        private int immunity;
 
         public ImmuneBuilder setCardName(String name) {
             this.name = name;return this;
@@ -46,8 +47,8 @@ public class ImmuneSpellCard extends SpellCard {
             this.desc = desc;return this;
         }
 
-        public ImmuneBuilder setCardDuration(int duration) {
-            this.duration = duration;return this;
+        public ImmuneBuilder setCardImmunity(int immunity) {
+            this.immunity = immunity;return this;
         }
     
         public ImmuneBuilder setCardImagePath(String imagepath) {

@@ -115,7 +115,7 @@ public class CardReader {
                     .setCardName(row[1])
                     .setCardDescription(row[2])
                     .setCardImagePath(row[3])
-                    .setCardDuration(Integer.parseInt(row[4]))
+                    .setCardImmunity(Integer.parseInt(row[4]))
                     .setCardMana(Integer.parseInt(row[5]))
                     .getResult();
             cardDict.put(row[0], s);
