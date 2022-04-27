@@ -2,7 +2,7 @@ package com.aetherwars.GUI;
 
 import com.aetherwars.card.*;
 import com.aetherwars.model.Player;
-
+import com.aetherwars.util.CardRepo;
 
 import javax.swing.*;
 
@@ -18,6 +18,7 @@ import java.lang.Math;
 
 public class GUI extends Thread{
     // Main Frame
+    CardRepo repo;
     Player p1, p2;
     int P1InitialDeckSize, P2InitialDeckSize;
     int turn = 0;
@@ -83,12 +84,21 @@ public class GUI extends Thread{
     JPanel NoticePanel;
     JLabel NoticeLabel;
 
+    //Import Deck
+    JPanel ImportDeckPanel;
+    JLabel ImportDeckLabel;
+    JTextField ImportDeckField;
+    JButton ImportDeckButton;
+    ImportPhase importPhase = new ImportPhase();
+
     //Window Size   
     Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-    int width = 1080;//(int)size.getWidth();
-    int height = 720;//(int)size.getHeight();
+    int width = (int)size.getWidth();
+    int height = (int)size.getHeight();
 
-    public GUI(Player player1, Player player2) throws IOException, URISyntaxException {
+    public GUI(Player player1, Player player2, CardRepo repo) throws IOException, URISyntaxException {
+        this.repo = repo;
+        
         // Crate Frame
         this.p1 = player1;
         this.p2 = player2;
@@ -425,6 +435,32 @@ public class GUI extends Thread{
         this.ManaButton.setActionCommand("MN");
         this.ManaPanel.add(this.ManaButton);
 
+        //Import Deck
+        this.ImportDeckPanel = new JPanel();
+        this.ImportDeckPanel.setBounds(0,0,width,height);
+        this.ImportDeckPanel.setLayout(null);
+
+        this.ImportDeckLabel = new JLabel("<html>Enter Player 1 Deck Name (Empty for random deck)</html>");
+        this.ImportDeckLabel.setBounds(Math.floorDiv(width, 4), Math.floorDiv(3*height,10), Math.floorDiv(width,2), Math.floorDiv(height,10));
+        this.ImportDeckLabel.setFont(new Font("Arial", Font.BOLD, Math.floorDiv(20*width,1080)));
+
+
+        this.ImportDeckField = new JTextField();
+        this.ImportDeckField.setBounds(Math.floorDiv(width, 4), Math.floorDiv(2*height,5), Math.floorDiv(width,2), Math.floorDiv(height,10));
+        this.ImportDeckField.setFont(new Font("Arial", Font.BOLD, Math.floorDiv(20*width,1080)));
+        this.ImportDeckField.setToolTipText("Masukan Nama Deck Player 1");
+
+        this.ImportDeckButton = new JButton("Import Deck");
+        this.ImportDeckButton.setBounds(Math.floorDiv(5*width, 8), Math.floorDiv(5*height,10), Math.floorDiv(width,8), Math.floorDiv(height,10));
+        this.ImportDeckButton.setFont(new Font("Arial", Font.BOLD, Math.floorDiv(20*width,1080)));
+        this.ImportDeckButton.setHorizontalAlignment(SwingConstants.CENTER);
+        this.ImportDeckButton.addActionListener(this.importPhase);
+
+        this.ImportDeckPanel.add(this.ImportDeckLabel);
+        this.ImportDeckPanel.add(this.ImportDeckField);
+        this.ImportDeckPanel.add(this.ImportDeckButton);
+
+        this.window.add(this.ImportDeckPanel);
         this.window.add(this.NoticePanel);
         this.window.add(this.DrawPhasePanel);
         this.window.add(this.Board1);
@@ -470,7 +506,9 @@ public class GUI extends Thread{
         this.P2InitialDeckSize = p2.getDeck().getNeff();
 
         showEndPhase();
-        nextPhase();
+        this.ThrowButton.setEnabled(false);
+        this.ManaButton.setEnabled(false);
+        this.NextPhaseButton.setEnabled(false);
     }
 
     private ImageIcon scaleImage(ImageIcon unscaled_image, int width, int height) {
@@ -637,6 +675,30 @@ public class GUI extends Thread{
         @Override
         protected void paintComponent(Graphics g) {
             g.drawOval(0, 0, g.getClipBounds().width, g.getClipBounds().height);
+        }
+    }
+
+    public class ImportPhase implements ActionListener {
+        int i = 0;
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(i==0){
+                ImportDeckLabel.setText("<html>Enter Player 2 Deck Name (Empty for random deck)</html>");
+                String deckname = ImportDeckField.getText();
+                if(!deckname.equals("")){
+                    p1.ImportDeck(repo, deckname);
+                }
+                ImportDeckField.setText("");
+                i++;
+            }
+            else{
+                String deckname = ImportDeckField.getText();
+                if(!deckname.equals("")){
+                    p2.ImportDeck(repo, deckname);
+                }
+                ImportDeckPanel.setVisible(false);
+                nextPhase();
+            }
         }
     }
 

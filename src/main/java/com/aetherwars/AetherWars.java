@@ -13,8 +13,8 @@ public class AetherWars {
         // for (Card c : dict.values()){
         //     c.show();
         // }
-        Player player1 = new Player("Lumine",repo,1);
+        Player player1 = new Player("Lumine",repo);
         Player player2 = new Player("Ayaka",repo);
-        GUI gui = new GUI(player1,player2);
+        GUI gui = new GUI(player1,player2, repo);
     }
 }

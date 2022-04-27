@@ -24,8 +24,8 @@ public class Deck implements CardContainer {
         }
     }
 
-    Deck(CardRepo repo, int player) throws IOException, URISyntaxException{
-        this.cards = ImportDeck.read(repo, player);
+    Deck(CardRepo repo, String deckname) throws IOException, URISyntaxException{
+        this.cards = ImportDeck.read(repo, deckname);
     }
 
     public int getNeff() {

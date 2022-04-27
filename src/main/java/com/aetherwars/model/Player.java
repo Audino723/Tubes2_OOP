@@ -29,13 +29,13 @@ public class Player {
         this.deck = new Deck(repo);
     }
 
-    public Player(String name, CardRepo repo, int player) throws IOException, URISyntaxException {
+    public Player(String name, CardRepo repo, String deckname) throws IOException, URISyntaxException {
         this.name = name;
         this.hp = 80;
         this.mana = 0;
         this.board = new Board();
         this.hand = new Hand();
-        this.deck = new Deck(repo, 1);
+        this.deck = new Deck(repo, deckname);
     }
 
     public String getName()
@@ -83,6 +83,14 @@ public class Player {
         return false;
     }
 
+    public void ImportDeck(CardRepo repo, String deckname){
+        try {
+            this.deck = new Deck(repo, deckname);
+        } catch (Exception e) {
+            //TODO: handle exception
+        }
+    }
+
     public void updateBoard(){
         /* Mengecek status summoned character pada board */ 
         this.board.updateSummonedCharacter();
@@ -112,6 +120,7 @@ public class Player {
         // Check first round
         if (rounds == 1)
         {   
+            this.deck.shuffle();
             try 
             {
                 ArrayList<Card> drawnDeck = this.deck.draw();
