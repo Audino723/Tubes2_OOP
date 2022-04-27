@@ -33,4 +33,4 @@ id	name	type	description	imagepath	attack	health	mana	attackup	healthup
 32	Robot Raiden	END	An overpowered Electro Archon who can transform into a robot.	card/image/character/robotraiden.png	30	1	8	10	1
 33	A yaka	END	An ordinary girl from the Kamisato Bloodline who loves Aether.	card/image/character/A_yaka.png	2	2	1	1	1
 34	yaka S	END	An ordinary girl from the Kamisato Bloodline who loves Aether x 9.	card/image/character/yaka_S.png	18	18	10	1	1
-35	Manusia Ganteng	END	Manusa Ganteng ga perlu penjelasan lebih lanjut.	card/image/character/manusiaganteng.pnt	100	100	11	1	1
+35	Manusia Ganteng	END	Manusa Ganteng ga perlu penjelasan lebih lanjut.	card/image/character/manusiaganteng.png	100	100	11	1	1

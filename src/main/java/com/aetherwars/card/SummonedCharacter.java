@@ -239,6 +239,8 @@ public class SummonedCharacter {
                 this.level = tempLevel;
                 this.manaChar = tempMana;
                 this.exp = (Integer) ret.get(1);
+                this.countTotalAttack();
+                this.countTotalHealth();
             } else {
                 System.out.println("Level out of range");
             }
@@ -260,6 +262,8 @@ public class SummonedCharacter {
         } else if (s.getType() == Type.MORPH) {
             ret = s.giveEffect();
             this.character = (CharacterCard) ret.get(0);
+            this.countTotalAttack();
+            this.countTotalHealth();
         } else if (s.getType() == Type.IMMUNE) {
             ret = s.giveEffect();
             int tempMana = (int) Math.ceil(this.level / 2);

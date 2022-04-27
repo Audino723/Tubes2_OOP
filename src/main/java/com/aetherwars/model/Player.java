@@ -35,7 +35,7 @@ public class Player {
         this.mana = 0;
         this.board = new Board();
         this.hand = new Hand();
-        this.deck = new Deck(repo,player);
+        this.deck = new Deck(repo, 1);
     }
 
     public String getName()
@@ -180,7 +180,7 @@ public class Player {
 
     public void replaceHandFromDraw(String command){
         /* Melakukan draw dari deck ketika hand sudah penuh */
-        Integer[] indexes = this.playerCommandHandler(CommandType.REPLACE_HAND_FROM_DRAW, command);
+        Integer[] indexes = this.playerCommandHandler(CommandType.REPLACE_HAND_FROM_DRAW, command, 0);
 
         int choosenIndex = indexes[0];
         int placingIndex = indexes[1];
@@ -229,12 +229,13 @@ public class Player {
     }
 
     public void throwCardOnHand(String command){
-        Integer[] indexes = this.playerCommandHandler(CommandType.THROW_FROM_HAND, command);
+        Integer[] indexes = this.playerCommandHandler(CommandType.THROW_FROM_HAND, command, 0);
 
         int choosenIndex = indexes[0];
 
         if (choosenIndex == -1)
         {
+            System.out.println(choosenIndex);
             System.out.println("gagal throw card");
             return;
         }
@@ -249,7 +250,7 @@ public class Player {
     }
 
     public void throwCardOnBoard(String command){
-        Integer[] indexes = this.playerCommandHandler(CommandType.THROW_FROM_BOARD, command);
+        Integer[] indexes = this.playerCommandHandler(CommandType.THROW_FROM_BOARD, command, 0);
 
         int choosenIndex = indexes[0];
 
@@ -260,7 +261,8 @@ public class Player {
         }
 
         try {
-            // contoh command : "B1 + TH"
+            // contoh command : "TC + A1, TC + B1"
+            System.out.println(choosenIndex);
             this.board.take(choosenIndex-1);
 
         } catch (Exception e) {
@@ -268,21 +270,29 @@ public class Player {
         }
     }
 
-    public void handToBoard(Player p2, String command) {
+    public void handToBoard(Player p2, String command, int current_player) {
         /*  Mengambil kartu dari hand dan meletakkan ke board*/
 
-        Integer[] indexes = this.playerCommandHandler(CommandType.DRAW_FROM_HAND_TO_BOARD, command);
+        Integer[] indexes = this.playerCommandHandler(CommandType.DRAW_FROM_HAND_TO_BOARD, command, current_player);
 
-        if (indexes[0]  <= 0)
+        int choosenIndex = indexes[0];
+        int placingIndex = indexes[1];
+
+        
+        System.out.println(choosenIndex);
+        System.out.println(placingIndex);
+
+        if (indexes[0]  < 0 || indexes[0] == 6)
         {            
             System.out.println("Gagal mensummmon character");
             return;
         }
 
-        int choosenIndex = indexes[0];
-        int placingIndex = indexes[1];
         try
         {   
+            System.out.println(choosenIndex);
+            System.out.println(placingIndex);
+
             // Ambil kartu karakter dan cek penggunaan mana
             Card  c = this.hand.take(choosenIndex);
             if (!useMana(c.getMana()))
@@ -293,6 +303,11 @@ public class Player {
             }
 
             if (c instanceof CharacterCard) {
+                if (placingIndex > 5)
+                {
+                    placingIndex -= 6;
+                }
+
                 CharacterCard characterCard = (CharacterCard) c;
                 SummonedCharacter summonedCharacter = new SummonedCharacter(characterCard, 1, 0);
                 this.board.add(summonedCharacter, placingIndex);
@@ -303,9 +318,17 @@ public class Player {
             else
             {
                 SpellCard spellCard = (SpellCard) c;
-                this.board.getSummonedCharacter(placingIndex).takeSpell(spellCard); 
+                if (placingIndex > 5){
+                    // Use on enemy
+                    p2.getBoard().getSummonedCharacter(placingIndex-6).takeSpell(spellCard); 
+                }
+                else
+                {
+                    // Use on player
+                    this.board.getSummonedCharacter(placingIndex).takeSpell(spellCard); 
+                }
 
-                // Menggunakan spell offensive
+                // Menggunakan spell 
                 this.updateBoard();
                 p2.updateBoard();               
             }
@@ -319,7 +342,7 @@ public class Player {
     public void levelUpSummonedWithMana(String command) {
         /* Melakukan level-up summoned-character dengan mana */
 
-        Integer[] indexes = this.playerCommandHandler(CommandType.LEVEL_UP_SUMMONED_WITH_MANA, command);
+        Integer[] indexes = this.playerCommandHandler(CommandType.LEVEL_UP_SUMMONED_WITH_MANA, command, 0);
 
         int placingIndex = indexes[1];
 
@@ -344,7 +367,7 @@ public class Player {
     public Boolean attack(Player p2, String command) {
         /* Melakukan attack ke player musuh */
 
-        Integer[] indexes = this.playerCommandHandler(CommandType.ATTACK_OTHER, command);
+        Integer[] indexes = this.playerCommandHandler(CommandType.ATTACK_OTHER, command, 0);
         Boolean isAttackSuccess = false;
 
         if (indexes[0] == -1)
@@ -388,15 +411,20 @@ public class Player {
         return isAttackSuccess;
     }
 
-    public Integer[] playerCommandHandler(CommandType type, String command){
+    public Integer[] playerCommandHandler(CommandType type, String command, int current_player){
         /* Command Handling */
-
         Integer[] indexes = new Integer[2];
 
         switch(type) {
             case DRAW_FROM_HAND_TO_BOARD:
                 if  (command.charAt(0) == 'H' && 
-                    command.substring(5,6).matches("[A|B]")) 
+                    command.substring(5,6).matches("B")) 
+                {
+                    indexes[0] = (int) command.charAt(1) - 49;
+                    indexes[1] = (int) command.charAt(6) - 49;
+                }
+                else if  (command.charAt(0) == 'H' && 
+                    command.substring(5,6).matches("A")) 
                 {
                     indexes[0] = (int) command.charAt(1) - 49;
                     indexes[1] = (int) command.charAt(6) - 49;
@@ -406,6 +434,18 @@ public class Player {
                     indexes[0] = -1;
                     indexes[1] = -1;
                 }
+
+                if (current_player == 1 && command.substring(5,6).matches("B"))
+                {
+                    // Player 1 put spell on player 2
+                    indexes[1] += 6;
+                }
+                else if (current_player == 2 && command.substring(5,6).matches("A"))
+                {
+                    // Player 2 put spell on player 1
+                    indexes[1] += 6;
+                }
+
                 break;
 
             case REPLACE_HAND_FROM_DRAW:
@@ -423,7 +463,7 @@ public class Player {
                 if  (command.substring(5,6).matches("[A|B]") && 
                     command.substring(0,2).matches("TC")) 
                 {
-                    indexes[0] = (int) command.charAt(1) - 49;
+                    indexes[0] = (int) command.charAt(6) - 49 + 1;
                     indexes[1] = -1;
                 }
                 else
@@ -433,10 +473,10 @@ public class Player {
                 }
                 break;
             case THROW_FROM_HAND:
-                if  (command.substring(0,1).matches("H") && 
-                    command.substring(5,7).matches("TC")) 
+                if  (command.substring(5,6).matches("H") && 
+                    command.substring(0,2).matches("TC")) 
                 {
-                    indexes[0] = (int) command.charAt(1) - 49;
+                    indexes[0] = (int) command.charAt(6) - 49;
                     indexes[1] = -1;
                 }
                 else

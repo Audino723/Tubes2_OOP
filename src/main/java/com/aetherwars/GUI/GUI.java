@@ -85,8 +85,8 @@ public class GUI extends Thread{
 
     //Window Size   
     Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-    int width = (int)size.getWidth();
-    int height = (int)size.getHeight();
+    int width = 1080;//(int)size.getWidth();
+    int height = 720;//(int)size.getHeight();
 
     public GUI(Player player1, Player player2) throws IOException, URISyntaxException {
         // Crate Frame
@@ -822,11 +822,14 @@ public class GUI extends Thread{
                 if (this.command1.equals("TC")) {
                     enableBoard(current_player);
                     disableEmptyBoard(current_player);
+                    ManaButton.setEnabled(false);
+                    ThrowButton.setBorder(BorderFactory.createLineBorder(Color.WHITE, 4));
                 }
                 else if(this.command1.equals("MN")){
                     disableHand();
                     enableBoard(current_player);
                     disableEmptyBoard(current_player);
+                    ThrowButton.setEnabled(false);
                     ManaButton.setBorder(BorderFactory.createLineBorder(Color.WHITE, 4));
                 }
                 else if (this.command1.charAt(0) == 'D') {
@@ -876,6 +879,7 @@ public class GUI extends Thread{
                 }
             } else {
                 this.command2 = e.getActionCommand();
+                System.out.println(this.command1 + " + " + this.command2);   
                 if(this.command1.equals("MN")){
                     if(!this.command2.equals("MN")){
                         if(current_player==1){
@@ -895,33 +899,36 @@ public class GUI extends Thread{
                             enableHand();
                             this.command1 = null;
                             this.command2 = null;
+                            ThrowButton.setEnabled(true);
                         }
-                }else{
-                    System.out.println(this.command1 + " + " + this.command2);
-                    if(command1.equals("TC")){
-                        if(command2.equals("TC")){
-                            command1=null;
-                            disableBoard(current_player);
-                        }
-                        else if ((command1.charAt(0) == 'B' && current_player == 2 ) || (command1.charAt(0) == 'A' && current_player == 1 ))
-                        {
-                            player.throwCardOnBoard(this.command1 + " + " + this.command2);
-                            updateBoard();
-                        }
-                        else if (command1.charAt(0) == 'H')
-                        {
-                            player.throwCardOnHand(this.command1 + " + " + this.command2);
-                            updateHand();
-                        }
-                        command2=null;
+                }else if(command1.equals("TC")){
+                    if(command2.equals("TC")){
+                        command1=null;
+                        disableBoard(current_player);
+                        ThrowButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                        ManaButton.setEnabled(true);
                     }
-                    else if(this.command1.charAt(0)=='D'){
+                    else if ((command2.charAt(0) == 'B' && current_player == 2 ) || (command2.charAt(0) == 'A' && current_player == 1 ))
+                    {
+                        player.throwCardOnBoard(this.command1 + " + " + this.command2);
+                        updateBoard();
+                        update();
+                    }
+                    else if (command2.charAt(0) == 'H')
+                    {
+                        player.throwCardOnHand(this.command1 + " + " + this.command2);
+                        updateHand();
+                    }
+                    command2=null;
+                }
+                else{
+                    if(this.command1.charAt(0)=='D'){
                         player.replaceHandFromDraw(this.command1 +" + "+ this.command2);
                         NoticePanel.setVisible(false);
                         nextPhase();
                     }
                     else if(this.command1.charAt(0)=='H'){
-                        player.handToBoard(enemy, this.command1 + " + " + this.command2);
+                        player.handToBoard(enemy, this.command1 + " + " + this.command2, current_player);
                         disableBoard(current_player-1);
                         updateBoard();
                         updateHand();
@@ -976,6 +983,8 @@ public class GUI extends Thread{
         }
         this.P1Card[5].setBorder(BorderFactory.createLineBorder(Color.BLACK));
         this.P2Card[5].setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        this.ManaButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        this.ThrowButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
     }
 
     public void disableEmptyBoard(int player) {
