@@ -4,6 +4,7 @@ import com.aetherwars.card.Card;
 import com.aetherwars.card.CharacterCard;
 import com.aetherwars.card.SummonedCharacter;
 import com.aetherwars.card.SpellCard;
+import com.aetherwars.util.CardRepo;
 import com.aetherwars.util.CommandType;
 
 import java.io.IOException;
@@ -19,22 +20,22 @@ public class Player {
     private Board board;
 
     // Nitip, nanti buat dipass ke deck
-    public Player(String name, HashMap<String, Card> cdict) {
+    public Player(String name, CardRepo repo) {
         this.name = name;
         this.hp = 80;
         this.mana = 0;
         this.board = new Board();
         this.hand = new Hand();
-        this.deck = new Deck(cdict);
+        this.deck = new Deck(repo);
     }
 
-    public Player(String name, HashMap<String, Card> cdict, int player) throws IOException, URISyntaxException {
+    public Player(String name, CardRepo repo, int player) throws IOException, URISyntaxException {
         this.name = name;
         this.hp = 80;
         this.mana = 0;
         this.board = new Board();
         this.hand = new Hand();
-        this.deck = new Deck(cdict,player);
+        this.deck = new Deck(repo,player);
     }
 
     public String getName()

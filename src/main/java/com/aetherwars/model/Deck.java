@@ -3,6 +3,7 @@ package com.aetherwars.model;
 import com.aetherwars.card.Card;
 import com.aetherwars.exceptions.EmptyContainerException;
 import com.aetherwars.exceptions.FullContainerException;
+import com.aetherwars.util.CardRepo;
 import com.aetherwars.util.ImportDeck;
 
 import java.io.IOException;
@@ -12,22 +13,19 @@ import java.util.*;
 public class Deck implements CardContainer {
     private final Stack<Card> cards;
 
-    Deck(HashMap<String, Card> cdict) {
+    Deck(CardRepo repo) {
         this.cards = new Stack<>();
 
         Random rand = new Random();
         int totalInitialCards = 40 + rand.nextInt(20);
 
-        ArrayList<String> generator = new ArrayList<>(cdict.keySet());
-        int n = generator.size();
         for (int i = 0; i < totalInitialCards; i++) {
-            int k = rand.nextInt(n - 1);
-            this.cards.push(cdict.get(generator.get(k)));
+            this.cards.push(repo.getRandomCard());
         }
     }
 
-    Deck(HashMap<String, Card> cdict, int player) throws IOException, URISyntaxException{
-        this.cards = ImportDeck.read(cdict, player);
+    Deck(CardRepo repo, int player) throws IOException, URISyntaxException{
+        this.cards = ImportDeck.read(repo, player);
     }
 
     public int getNeff() {

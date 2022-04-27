@@ -7,6 +7,7 @@ public class ImmuneSpellCard extends SpellCard {
     int immunity;
     public ImmuneSpellCard(ImmuneBuilder builder) {
         super(builder.name, builder.desc, Type.IMMUNE, builder.imagepath, builder.mana, 0);
+        this.immunity = builder.immunity;
     }
 
     public void show() {

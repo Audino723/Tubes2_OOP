@@ -2,16 +2,15 @@ package com.aetherwars.GUI;
 
 import com.aetherwars.card.*;
 import com.aetherwars.model.Player;
-import com.aetherwars.util.CardReader;
+
 
 import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.HashMap;
 
 import java.util.ArrayList;
 

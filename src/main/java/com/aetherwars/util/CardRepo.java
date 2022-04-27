@@ -1,7 +1,14 @@
+package com.aetherwars.util;
+
+import java.util.HashMap;
+import java.util.Random;
+
+import com.aetherwars.card.Card;
+
 public class CardRepo {
     HashMap<String, Card> cardDict;
     public CardRepo(){
-        cardDict = new HashMap<>();
+        cardDict = new HashMap<String,Card>();
     }
     public void InsertCard(String id, Card c){
         cardDict.put(id, c); 
@@ -31,7 +38,7 @@ public class CardRepo {
         return cardDict.get(id);
     }
 
-    public Card getRandom(){
+    public Card getRandomCard(){
         Random r = new Random();
         int i = r.nextInt(cardDict.size());
         return cardDict.get(cardDict.keySet().toArray()[i].toString());
