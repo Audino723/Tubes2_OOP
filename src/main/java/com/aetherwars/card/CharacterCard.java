@@ -18,16 +18,16 @@ public class CharacterCard extends Card {
     }
 
     // Getter
-    protected int getBaseAtk() {
+    public int getBaseAtk() {
         return this.baseAtk;
     }
-    protected int getBaseHp() {
+    public int getBaseHp() {
         return this.baseHp;
     }
-    protected int getAttackUp() {
+    public int getAttackUp() {
         return this.attackUp;
     }
-    protected int getHealthUp() {
+    public int getHealthUp() {
         return this.healthUp;
     }
 
