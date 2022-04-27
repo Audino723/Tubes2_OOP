@@ -820,7 +820,8 @@ public class GUI extends Thread{
                 this.command1 = e.getActionCommand();
                 // System.out.println(this.command1);
                 if (this.command1.equals("TC")) {
-                    this.command1 = null;
+                    enableBoard(current_player);
+                    disableEmptyBoard(current_player);
                 }
                 else if(this.command1.equals("MN")){
                     disableHand();
@@ -860,6 +861,8 @@ public class GUI extends Thread{
                         } else {
                             enableBoard(current_player);
                             disableEmptyBoard(current_player);
+                            enableBoard(current_player-1);
+                            disableEmptyBoard(current_player-1);
                         }
                     }
                     if (command1.charAt(0) == 'A') {
@@ -895,8 +898,12 @@ public class GUI extends Thread{
                         }
                 }else{
                     System.out.println(this.command1 + " + " + this.command2);
-                    if(command2.equals("TC")){
-                        if ((command1.charAt(0) == 'B' && current_player == 2 ) || (command1.charAt(0) == 'A' && current_player == 1 ))
+                    if(command1.equals("TC")){
+                        if(command2.equals("TC")){
+                            command1=null;
+                            disableBoard(current_player);
+                        }
+                        else if ((command1.charAt(0) == 'B' && current_player == 2 ) || (command1.charAt(0) == 'A' && current_player == 1 ))
                         {
                             player.throwCardOnBoard(this.command1 + " + " + this.command2);
                             updateBoard();
@@ -906,8 +913,7 @@ public class GUI extends Thread{
                             player.throwCardOnHand(this.command1 + " + " + this.command2);
                             updateHand();
                         }
-                        
-
+                        command2=null;
                     }
                     else if(this.command1.charAt(0)=='D'){
                         player.replaceHandFromDraw(this.command1 +" + "+ this.command2);
@@ -916,6 +922,7 @@ public class GUI extends Thread{
                     }
                     else if(this.command1.charAt(0)=='H'){
                         player.handToBoard(enemy, this.command1 + " + " + this.command2);
+                        disableBoard(current_player-1);
                         updateBoard();
                         updateHand();
                     }

@@ -420,8 +420,8 @@ public class Player {
                 }
                 break;
             case THROW_FROM_BOARD:
-                if  (command.substring(0,1).matches("B") && 
-                    command.substring(5,7).matches("TC")) 
+                if  (command.substring(5,6).matches("[A|B]") && 
+                    command.substring(0,2).matches("TC")) 
                 {
                     indexes[0] = (int) command.charAt(1) - 49;
                     indexes[1] = -1;
