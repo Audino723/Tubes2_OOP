@@ -13,8 +13,10 @@ public class SwapSpellCard extends SpellCard {
     }
     
     @Override
-    ArrayList<Object> giveEffect() {
-        return null;
+    public ArrayList<Object> giveEffect() {
+        ArrayList<Object> effect = new ArrayList<Object>();
+        effect.add(this.getDuration());
+        return effect;
     }
 
     public void show() {

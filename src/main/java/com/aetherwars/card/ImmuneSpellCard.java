@@ -27,7 +27,7 @@ public class ImmuneSpellCard extends SpellCard {
         text = this.getName();
         text += "\n\nTipe       : " + this.getType();
         text += "\nMana     : " + this.getMana();
-        text += "\nDuration : " + this.getDuration();
+        text += "\nImmunity : " + this.immunity;
         text += "\n\n"+this.getDesc();
         return text;
     }

@@ -15,6 +15,16 @@ public class PotionSpellCard extends SpellCard {
         this.attack = builder.atk;
     }
 
+    public PotionSpellCard(String name, String desc, Type type, String imagepath, int mana, int duration, int hp, int atk) {
+        super(name,desc, type,imagepath,mana,duration);
+        this.hp = hp;
+        this.attack = atk;
+    }
+
+    public PotionSpellCard copyCard() {
+        return new PotionSpellCard(this.getName(), this.getDesc(), Type.PTN, this.getImagePath(), this.getMana(), this.getDuration(), this.getHP(), this.getAttack());
+    }
+
     public int getHP() {
         return this.hp;
     }

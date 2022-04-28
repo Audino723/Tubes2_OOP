@@ -41,7 +41,7 @@ public abstract class SpellCard extends Card {
         // Boolean to check if the card is already inactive
         return this.getStatus() == Status.INACTIVE;
     }
-
+    
     public Status decreaseDuration() {
         // Count lifetime of spell
         // Called every turns
@@ -53,6 +53,9 @@ public abstract class SpellCard extends Card {
             else{
                 this.status = Status.TEMP;
                 this.duration--;
+                if(this.duration == 0){
+                    this.status = Status.INACTIVE;
+                }
             }
             
             System.out.println("FIRSTROUND jadi pindah SECONDROUND");
@@ -67,7 +70,7 @@ public abstract class SpellCard extends Card {
         
         System.out.println("DURATION " + this.duration);
         return this.status;
-    }
+    }    
 
     abstract ArrayList<Object> giveEffect();
 }

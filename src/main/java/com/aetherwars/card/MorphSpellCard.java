@@ -15,7 +15,7 @@ public class MorphSpellCard extends SpellCard {
     }
 
     @Override
-    ArrayList<Object> giveEffect() {
+    public ArrayList<Object> giveEffect() {
         ArrayList<Object> ret = new ArrayList<Object>();
         ret.add(this.charToChange);
         return ret;
