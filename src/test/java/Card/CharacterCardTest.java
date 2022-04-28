@@ -33,8 +33,8 @@ public class CharacterCardTest {
     }
 
     @Test
-    public void testDescriptions(){
-        assertEquals(card.getDescription(),"Dummy Character");
+    public void testDesc(){
+        assertEquals(card.getDesc(), "Dummy Character");
     }
 
     @Test
