@@ -1,15 +1,16 @@
 package com.aetherwars.model;
 
 import com.aetherwars.card.Card;
-import com.aetherwars.card.CharacterCard;
-import com.aetherwars.card.SummonedCharacter;
-import com.aetherwars.exceptions.*;
+import com.aetherwars.exceptions.EmptyContainerException;
+import com.aetherwars.exceptions.FullContainerException;
+import com.aetherwars.exceptions.NoCardChosenException;
+import com.aetherwars.exceptions.SpaceFilledException;
 
 public class Hand implements CardContainer {
     private Card[] cards;
     private int neff;
 
-    Hand() {
+    public Hand() {
         this.cards = new Card[5];
         this.neff = 0;
     }
@@ -80,27 +81,6 @@ public class Hand implements CardContainer {
         }
     }
 
-    /* Kalau mau diambil sebagai character (untuk pindahin ke board) */
-    public SummonedCharacter takeAsCharacter() throws EmptyContainerException, NotCharacterCardException {
-        Card c = this.take();
-        if (c instanceof CharacterCard) {
-            CharacterCard cc = (CharacterCard) c;
-            return new SummonedCharacter(cc, 1, 0);
-        } else {
-            throw new NotCharacterCardException();
-        }
-    }
-
-    public SummonedCharacter takeAsCharacter(int i) throws NoCardChosenException, NotCharacterCardException {
-        Card c = this.take(i);
-        if (c instanceof CharacterCard) {
-            CharacterCard cc = (CharacterCard) c;
-            return new SummonedCharacter(cc, 1, 0);
-        } else {
-            throw new NotCharacterCardException();
-        }
-    }
-
     public void show(int i) throws NoCardChosenException {
         if (this.cards[i] == null) {
             throw new NoCardChosenException();
@@ -109,12 +89,8 @@ public class Hand implements CardContainer {
         }
     }
 
-    public Card getCard(int i){
+    public Card getCard(int i) {
         return this.cards[i];
     }
 
-    // To debug
-    public void showAll() {
-
-    }
 }

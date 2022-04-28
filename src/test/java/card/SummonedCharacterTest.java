@@ -1,9 +1,8 @@
-package Card;
+package card;
 
 import com.aetherwars.card.*;
 import com.aetherwars.util.Type;
 import org.junit.jupiter.api.*;
-import org.junit.experimental.theories.suppliers.TestedOn;
 
 import static org.junit.Assert.assertEquals;
 

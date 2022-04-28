@@ -1,10 +1,9 @@
-package Card;
+package card;
 
 import com.aetherwars.card.MorphSpellCard;
 import com.aetherwars.card.CharacterCard;
 import com.aetherwars.util.Type;
 import org.junit.jupiter.api.Test;
-import org.junit.experimental.theories.suppliers.TestedOn;
 import org.junit.jupiter.api.BeforeEach;
 
 import static org.junit.Assert.assertEquals;

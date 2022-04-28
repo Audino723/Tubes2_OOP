@@ -1,6 +1,5 @@
 package com.aetherwars.model;
 
-import com.aetherwars.card.Card;
 import com.aetherwars.card.CharacterCard;
 import com.aetherwars.card.SummonedCharacter;
 import com.aetherwars.exceptions.EmptyContainerException;
@@ -12,7 +11,7 @@ public class Board {
     private final SummonedCharacter[] characters;
     private int neff;
 
-    Board() {
+    public Board() {
         this.characters = new SummonedCharacter[5];
     }
 
@@ -27,7 +26,7 @@ public class Board {
     public void updateState() {
         /* PENTING!! UPDATE CHARACTER STATE SETIAP TURN */
         for (SummonedCharacter sc : this.characters) {
-            if(sc != null){
+            if (sc != null) {
                 sc.updatePotionsTime();
             }
         }
@@ -36,10 +35,8 @@ public class Board {
     public void updateSummonedCharacter() {
         // Ngecek summoned character yang udah mati
         for (int i = 0; i < characters.length; i++) {
-            if (characters[i] != null)
-            {
-                if (characters[i].isDead())
-                {
+            if (characters[i] != null) {
+                if (characters[i].isDead()) {
                     characters[i] = null;
                     this.neff -= 1;
                 }
@@ -104,17 +101,6 @@ public class Board {
         }
     }
 
-    /* Kalau mau diambil sebagai card (untuk pindahin ke hand) */
-    public Card takeAsCard() throws EmptyContainerException {
-        SummonedCharacter sc = this.take();
-        return sc.getCharacter();
-    }
-
-    public Card takeAsCard(int i) throws NoCardChosenException {
-        SummonedCharacter sc = this.take(i);
-        return sc.getCharacter();
-    }
-
     public void show(int i) throws NoCardChosenException {
         if (this.characters[i] == null) {
             throw new NoCardChosenException();
@@ -123,7 +109,7 @@ public class Board {
         }
     }
 
-    public CharacterCard getCharacter(int i){
+    public CharacterCard getCharacter(int i) {
         if (this.characters[i] == null) {
             return null;
         } else {
@@ -131,7 +117,7 @@ public class Board {
         }
     }
 
-    public SummonedCharacter getSummonedCharacter(int i){
+    public SummonedCharacter getSummonedCharacter(int i) {
         if (this.characters[i] == null) {
             return null;
         } else {
@@ -142,7 +128,7 @@ public class Board {
     // To debug
     public void showAll() {
         for (SummonedCharacter summonedCharacter : characters) {
-            if (summonedCharacter != null){
+            if (summonedCharacter != null) {
                 summonedCharacter.show();
             }
         }

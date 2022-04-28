@@ -8,12 +8,15 @@ import com.aetherwars.util.ImportDeck;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
+import java.util.Stack;
 
 public class Deck implements CardContainer {
     private final Stack<Card> cards;
 
-    Deck(CardRepo repo) {
+    public Deck(CardRepo repo) {
         this.cards = new Stack<>();
 
         Random rand = new Random();
@@ -24,7 +27,7 @@ public class Deck implements CardContainer {
         }
     }
 
-    Deck(CardRepo repo, String deckname) throws IOException, URISyntaxException{
+    Deck(CardRepo repo, String deckname) throws IOException, URISyntaxException {
         this.cards = ImportDeck.read(repo, deckname);
     }
 
@@ -77,10 +80,4 @@ public class Deck implements CardContainer {
         /* Untuk melakukan shuffle setelah draw phase */
         Collections.shuffle(this.cards);
     }
-
-    // To debug
-    public void showAll() {
-
-    }
-
 }
