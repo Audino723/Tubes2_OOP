@@ -25,7 +25,7 @@ public class Hand implements CardContainer {
 
     public void add(Card c) throws FullContainerException {
         /* Add card di tempat kosong pertama */
-        if (this.neff == 5) {
+        if (this.isFull()) {
             throw new FullContainerException();
         } else {
             for (int i = 0; i < 5; i++) {

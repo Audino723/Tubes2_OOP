@@ -9,14 +9,17 @@ import com.aetherwars.exceptions.NoCardChosenException;
 import com.aetherwars.exceptions.SpaceFilledException;
 import com.aetherwars.model.Hand;
 import com.aetherwars.util.Type;
-import org.junit.Test;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.*;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class HandTest {
-    static Hand hand;
+    private static Hand hand;
+    private static CharacterCard ccard;
+    private static SpellCard scard;
+
 
     public static CharacterCard makeCard() {
         return new CharacterCard.CharacterBuilder()
@@ -43,37 +46,45 @@ public class HandTest {
     }
 
     @BeforeAll
-    static void makeAll() {
+    public static void makeAll() throws FullContainerException, SpaceFilledException {
         hand = new Hand();
+        ccard = makeCard();
+        scard = makeSpell();
+
+        hand.add(ccard, 2);
+        hand.add(scard, 4);
     }
 
     @Test
+    @Order(1)
     public void testAdd() throws FullContainerException {
-        CharacterCard c1 = makeCard();
-        hand.add(c1);
-        assertEquals(1, hand.getNeff());
+        hand.add(ccard);
+        assertEquals(3, hand.getNeff());
     }
 
     @Test
+    @Order(2)
     public void testAddwithIndex() throws FullContainerException, SpaceFilledException {
-        SpellCard sc2 = makeSpell();
-
-        hand.add(sc2, 3);
-        assertEquals(2, hand.getNeff());
-        assertEquals(hand.getCard(3), sc2);
+        hand.add(scard, 3);
+        assertEquals(4, hand.getNeff());
+        assertEquals(hand.getCard(3), scard);
     }
 
     @Test
+    @Order(3)
     public void testTake() throws EmptyContainerException {
         hand.take();
-        assertEquals(1, hand.getNeff());
+
+        assertEquals(3, hand.getNeff());
     }
 
     @Test
+    @Order(4)
     public void testTakewithIndex() throws NoCardChosenException {
-        hand.take(3);
-        assertEquals(0, hand.getNeff());
-        assertNull(hand.getCard(3));
+        hand.take(4);
+
+        assertEquals(2, hand.getNeff());
+        assertNull(hand.getCard(4));
     }
 
 }

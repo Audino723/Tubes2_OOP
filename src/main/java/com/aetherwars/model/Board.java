@@ -53,6 +53,7 @@ public class Board {
             for (int i = 0; i < 5; i++) {
                 if (this.characters[i] == null) {
                     this.characters[i] = c;
+                    this.neff++;
                     return;
                 }
             }
@@ -125,7 +126,6 @@ public class Board {
         }
     }
 
-    // To debug
     public void showAll() {
         for (SummonedCharacter summonedCharacter : characters) {
             if (summonedCharacter != null) {

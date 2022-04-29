@@ -5,22 +5,32 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="41e67103-285a-41e0-a0df-3038d2abfdf0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/test/java/model/BoardTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/model/DeckTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/model/HandTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/javaCompile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/javaCompile/taskHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/main/com/aetherwars/card/data/character.csv" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/com/aetherwars/card/data/character.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/resources/main/com/aetherwars/card/data/spell_ptn.csv" beforeDir="false" afterPath="$PROJECT_DIR$/build/resources/main/com/aetherwars/card/data/spell_ptn.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/aetherwars/model/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aetherwars/model/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/aetherwars/model/Deck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aetherwars/model/Deck.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/aetherwars/model/Hand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aetherwars/model/Hand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/aetherwars/card/deck/deck1.csv" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/aetherwars/card/deck/deck1.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/aetherwars/card/deck/deck2.csv" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/aetherwars/card/deck/deck2.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/Card/CharacterCardTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/card/CharacterCardTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/Card/ImmuneSpellCardTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/card/ImmuneSpellCardTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/Card/LevelSpellCardTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/card/LevelSpellCardTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/Card/MorphSpellCardTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/card/MorphSpellCardTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/Card/PotionSpellCardTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/card/PotionSpellCardTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/Card/SummonedCharacterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/card/SummonedCharacterTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/Card/SwapSpellCardTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/card/SwapSpellCardTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/card/CharacterCardTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/card/CharacterCardTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/card/ImmuneSpellCardTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/card/ImmuneSpellCardTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/card/LevelSpellCardTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/card/LevelSpellCardTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/card/MorphSpellCardTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/card/MorphSpellCardTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/card/PotionSpellCardTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/card/PotionSpellCardTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/card/SummonedCharacterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/card/SummonedCharacterTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/card/SwapSpellCardTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/card/SwapSpellCardTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/model/BoardTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/model/BoardTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/model/DeckTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/model/DeckTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/model/HandTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/model/HandTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/utils/CardReaderTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/utils/CardReaderTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,6 +41,16 @@
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
     </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view />
+      </state>
+    </system>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -56,6 +76,87 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
+  </component>
+  <component name="RunManager" selected="JUnit.All in AetherWars.test">
+    <configuration name="All in AetherWars.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="AetherWars.test" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BoardTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="AetherWars.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="model.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="model" />
+      <option name="MAIN_CLASS_NAME" value="model.BoardTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BoardTest.testAddwithIndex" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="AetherWars.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="model.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="model" />
+      <option name="MAIN_CLASS_NAME" value="model.BoardTest" />
+      <option name="METHOD_NAME" value="testAddwithIndex" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DeckTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="AetherWars.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="model.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="model" />
+      <option name="MAIN_CLASS_NAME" value="model.DeckTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="HandTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="AetherWars.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="model.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="model" />
+      <option name="MAIN_CLASS_NAME" value="model.HandTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.All in AetherWars.test" />
+        <item itemvalue="JUnit.DeckTest" />
+        <item itemvalue="JUnit.BoardTest" />
+        <item itemvalue="JUnit.HandTest" />
+        <item itemvalue="JUnit.BoardTest.testAddwithIndex" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -78,5 +179,16 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/aetherwars/model/Board.java</url>
+          <line>94</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

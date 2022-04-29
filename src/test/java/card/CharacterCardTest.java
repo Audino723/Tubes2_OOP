@@ -2,17 +2,18 @@ package card;
 
 import com.aetherwars.card.CharacterCard;
 import com.aetherwars.util.Type;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class CharacterCardTest {
 
     CharacterCard card;
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         card = new CharacterCard.CharacterBuilder()
                 .setCardName("Dummy")
                 .setCardDescription("Dummy Character")
@@ -28,47 +29,47 @@ public class CharacterCardTest {
 
 
     @Test
-    public void testMana(){
-        assertEquals(2,this.card.getMana());
+    public void testMana() {
+        assertEquals(2, this.card.getMana());
     }
 
     @Test
-    public void testDesc(){
+    public void testDesc() {
         assertEquals(card.getDesc(), "Dummy Character");
     }
 
     @Test
-    public void testType(){
+    public void testType() {
         assertEquals(card.getType(), Type.NETHER);
     }
 
     @Test
-    public void testImagePath(){
+    public void testImagePath() {
         assertEquals(card.getImagePath(), "");
     }
 
     @Test
-    public void testName(){
+    public void testName() {
         assertEquals(card.getName(), "Dummy");
     }
 
     @Test
-    public void testAtk(){
+    public void testAtk() {
         assertEquals(card.getBaseAtk(), 4);
     }
 
     @Test
-    public void testHp(){
+    public void testHp() {
         assertEquals(card.getBaseHp(), 5);
     }
 
     @Test
-    public void testAtkUp(){
-        assertEquals(card.getAttackUp(),1);
+    public void testAtkUp() {
+        assertEquals(card.getAttackUp(), 1);
     }
 
     @Test
-    public void testHpUp(){
-        assertEquals(card.getHealthUp(),1);
+    public void testHpUp() {
+        assertEquals(card.getHealthUp(), 1);
     }
 }

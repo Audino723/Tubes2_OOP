@@ -17,3 +17,20 @@ id	name	type	description	imagepath	attack	health	mana	attackup	healthup
 16	Ghast	NETHER	A ghast is a large white floating ghost-like hostile mob in the Nether that shoots explosive fireballs at the player. 	card/image/character/Ghast.png	7	3	4	4	4
 17	Drowned	OVERWORLD	Drowned are common underwater zombie variants that spawn in oceans and rivers, or when zombies drown.	card/image/character/Drowned.png	4	5	4	4	5
 18	Obsidian	OVERWORLD	An obsidian block used to create Nether portals.	card/image/character/Obsidian.png	1	25	8	0	5
+19	Sulk Raiden	END	An overpowered Electro Archon who sulks because Sara told her no sweets before dinner.	card/image/character/sulkraiden.png	5	1	2	2	1
+20	Itaidakimas Raiden	END	An overpowered Electro Archon who Itaidakimas.	card/image/character/prayraiden.png	5	1	2	2	1
+21	Pig Raiden	END	An overpowered Electro Archon with her pig pet.	card/image/character/pigraiden.png	8	3	3	2	1
+22	Raiden n Gang	END	An overpowered Electro Archon with her sly fox Yae and her loyal tengu Sara.	card/image/character/likeabossraiden.png	30	1	10	10	1
+23	Eh Raiden	END	An overpowered Electro Archon who Eh....	card/image/character/ehraiden.png	5	1	2	2	1
+24	Dog Raiden	END	An overpowered Electro Archon who rides.... why tf you rode a dog.	card/image/character/dogriderraiden.png	10	1	3	4	1
+25	Cry Raiden	END	An overpowered Electro Archon who Cries and call Sara...helppp.	card/image/character/cryraiden.png	3	1	1	1	1
+26	Cry Hard Raiden	END	An overpowered Electro Archon who Cries and call Sara...helppp.	card/image/character/cryhardraiden.png	3	1	1	1	1
+27	Cry Hard Hard Raiden	END	An overpowered Electro Archon who Cries and call Sara...helppp.	card/image/character/cryinghardraiden.png	3	1	1	1	1
+28	Confused Raiden	END	An overpowered Electro Archon who cant count and call Sara...helppp.	card/image/character/confusedraiden.png	5	1	2	2	1
+29	Afraid Raiden	END	An overpowered Electro Archon who is afraid of being alone without Sara.	card/image/character/afraidraiden2.png	3	1	1	1	1
+30	Excalibur Raiden	END	An overpowered Electro Archon who can split an island into two.	card/image/character/excaliburraiden.png	50	1	10	10	1
+31	Mad Raiden	END	An overpowered Electro Archon who is mad because someone stole her dango.	card/image/character/madraiden2.png	40	1	9	10	1
+32	Robot Raiden	END	An overpowered Electro Archon who can transform into a robot.	card/image/character/robotraiden.png	30	1	8	10	1
+33	A yaka	END	An ordinary girl from the Kamisato Bloodline who loves Aether.	card/image/character/A_yaka.png	2	2	1	1	1
+34	yaka S	END	An ordinary girl from the Kamisato Bloodline who loves Aether x 9.	card/image/character/yaka_S.png	18	18	10	1	1
+35	Manusia Ganteng	END	Manusa Ganteng ga perlu penjelasan lebih lanjut.	card/image/character/manusiaganteng.png	100	100	11	1	1

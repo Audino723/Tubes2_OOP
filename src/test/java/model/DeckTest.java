@@ -2,23 +2,22 @@ package model;
 
 import com.aetherwars.card.Card;
 import com.aetherwars.card.CharacterCard;
-import com.aetherwars.card.LevelSpellCard;
 import com.aetherwars.exceptions.EmptyContainerException;
 import com.aetherwars.exceptions.FullContainerException;
 import com.aetherwars.model.Deck;
 import com.aetherwars.util.CardReader;
 import com.aetherwars.util.CardRepo;
 import com.aetherwars.util.Type;
-import org.junit.Test;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class DeckTest {
     static Deck deck;
 
@@ -35,24 +34,15 @@ public class DeckTest {
                 .setCardHpUp(1)
                 .getResult();
     }
-
-    public static LevelSpellCard makeSpell() {
-        return new LevelSpellCard.LevelSpellBuilder()
-                .setCardName("Level Spell")
-                .setCardDescription("Level Spell Card")
-                .setCardImagePath("None")
-                .setIncreaseLevel(true)
-                .setCardMana(1)
-                .getResult();
-    }
-
+    
     @BeforeAll
-    static void makeAll() throws IOException, URISyntaxException {
+    public static void makeAll() throws IOException, URISyntaxException {
         CardRepo repo = CardReader.read();
-        Deck deck = new Deck(repo);
+        deck = new Deck(repo);
     }
 
     @Test
+    @Order(1)
     public void testAdd() throws FullContainerException {
         CharacterCard c = makeCard();
         int count = deck.getNeff();
@@ -62,6 +52,7 @@ public class DeckTest {
     }
 
     @Test
+    @Order(2)
     public void testTake() throws EmptyContainerException {
         int count = deck.getNeff();
         Card c = deck.take();
@@ -70,17 +61,22 @@ public class DeckTest {
     }
 
     @Test
+    @Order(3)
     public void testDrawAndAdd() throws FullContainerException {
         int count = deck.getNeff();
+
         ArrayList<Card> arr = deck.draw();
         assertEquals(3, arr.size());
 
-        arr.get(0);
+        Card c = arr.remove(0);
+        assertEquals(2, arr.size());
+
         deck.add(arr);
         assertEquals(count - 1, deck.getNeff());
     }
 
     @Test
+    @Order(4)
     public void shuffle() throws EmptyContainerException, FullContainerException {
         int count = 0;
         Boolean same = true;
