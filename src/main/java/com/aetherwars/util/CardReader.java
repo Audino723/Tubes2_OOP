@@ -72,21 +72,6 @@ public class CardReader {
             repo.InsertCard(row[0], p);
         }
 
-        File cardCSVFile4 = new File(Objects.requireNonNull(AetherWars.class.getResource(SPELL_SWAP_CSV_FILE_PATH)).toURI());
-        CSVReader cardReader4 = new CSVReader(cardCSVFile4, "\t");
-        cardReader4.setSkipHeader(true);
-        List<String[]> characterRows4 = cardReader4.read();
-        for (String[] row : characterRows4) {
-            SwapSpellCard s = new SwapSpellCard.SwapBuilder()
-                    .setCardName(row[1])
-                    .setCardDescription(row[2])
-                    .setCardImagePath(row[3])
-                    .setCardDuration(Integer.parseInt(row[4]))
-                    .setCardMana(Integer.parseInt(row[5]))
-                    .getResult();
-            repo.InsertCard(row[0], s);
-        }
-
         File cardCSVFile5 = new File(Objects.requireNonNull(AetherWars.class.getResource(SPELL_LEVEL_CSV_FILE_PATH)).toURI());
         CSVReader cardReader5 = new CSVReader(cardCSVFile5, "\t");
         cardReader5.setSkipHeader(true);
@@ -100,6 +85,21 @@ public class CardReader {
                     .setCardMana(Integer.parseInt(row[5]))
                     .getResult();
             repo.InsertCard(row[0], l);
+        }
+
+        File cardCSVFile4 = new File(Objects.requireNonNull(AetherWars.class.getResource(SPELL_SWAP_CSV_FILE_PATH)).toURI());
+        CSVReader cardReader4 = new CSVReader(cardCSVFile4, "\t");
+        cardReader4.setSkipHeader(true);
+        List<String[]> characterRows4 = cardReader4.read();
+        for (String[] row : characterRows4) {
+            SwapSpellCard s = new SwapSpellCard.SwapBuilder()
+                    .setCardName(row[1])
+                    .setCardDescription(row[2])
+                    .setCardImagePath(row[3])
+                    .setCardDuration(Integer.parseInt(row[4]))
+                    .setCardMana(Integer.parseInt(row[5]))
+                    .getResult();
+            repo.InsertCard(row[0], s);
         }
 
         File cardCSVFile6 = new File(Objects.requireNonNull(AetherWars.class.getResource(SPELL_IMMUNE_CSV_FILE_PATH)).toURI());

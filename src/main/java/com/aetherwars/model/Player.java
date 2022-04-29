@@ -281,7 +281,7 @@ public class Player {
 
     public void handToBoard(Player p2, String command, int current_player) {
         /*  Mengambil kartu dari hand dan meletakkan ke board*/
-
+        
         Integer[] indexes = this.playerCommandHandler(CommandType.DRAW_FROM_HAND_TO_BOARD, command, current_player);
 
         int choosenIndex = indexes[0];
